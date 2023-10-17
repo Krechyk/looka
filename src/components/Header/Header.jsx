@@ -1,13 +1,14 @@
 import React from 'react'
-import logo from '../img/logo.png'
+import { Link } from 'react-router-dom'
+import logo from '../../img/logo.png'
 
 const Header = () => {
 	return (
 		<div className='h-16 flex justify-between items-center'>
 			<div><img src={logo} alt="" /></div>
 			<div className='flex gap-8 text-xs'>
-				<div>Logo Maker</div>
-				<div>Brand Kit</div>
+				<Link to="/" >Logo Maker</Link>
+				<Link to="/brand_kit">Brand Kit</Link>
 				<div>How It Works</div>
 				<div>Reviews</div>
 				<div>Logo Ideas</div>

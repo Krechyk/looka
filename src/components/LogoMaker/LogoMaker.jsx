@@ -1,27 +1,26 @@
 import React from 'react'
-import { Accordion, Footer } from 'flowbite-react'
-import { BsFacebook, BsGithub, BsInstagram, BsTwitter } from 'react-icons/bs'
-import Example1 from '../img/Example1.png'
-import Example2 from '../img/Example2.png'
-import Example3 from '../img/Example3.png'
-import Example4 from '../img/Example4.png'
-import Example5 from '../img/Example5.png'
-import Example6 from '../img/Example6.png'
-import HighResLogos from '../img/High-res-logos.png'
-import VectorFiles from '../img/Vector-files.png'
-import ColorVariations from '../img/Color-variations.png'
-import BusinessCardDesigns from '../img/Business-card-designs.png'
-import SocialMediaTemplates from '../img/Social-media-templates.png'
-import BrandInfo from '../img/Brand-info.png'
-import PostPurchaseChanges from '../img/Post-purchase-changes.png'
-import LifetimeLogoSupport from '../img/Lifetime-logo-support.png'
-import RoyaltyFreeLogos from '../img/Royalty-free-logos.png'
-import LogoExample1 from '../img/LogoExample1.png'
-import LogoExample2 from '../img/LogoExample2.png'
-import LogoExample3 from '../img/LogoExample3.png'
-import LogoExample4 from '../img/LogoExample4.png'
-import LogoExample5 from '../img/LogoExample5.png'
-import LogoExample6 from '../img/LogoExample6.png'
+import { Accordion } from 'flowbite-react'
+import Example1 from '../../img/logo-maker/Example1.png'
+import Example2 from '../../img/logo-maker/Example2.png'
+import Example3 from '../../img/logo-maker/Example3.png'
+import Example4 from '../../img/logo-maker/Example4.png'
+import Example5 from '../../img/logo-maker/Example5.png'
+import Example6 from '../../img/logo-maker/Example6.png'
+import HighResLogos from '../../img/logo-maker/High-res-logos.png'
+import VectorFiles from '../../img/logo-maker/Vector-files.png'
+import ColorVariations from '../../img/logo-maker/Color-variations.png'
+import BusinessCardDesigns from '../../img/logo-maker/Business-card-designs.png'
+import SocialMediaTemplates from '../../img/logo-maker/Social-media-templates.png'
+import BrandInfo from '../../img/logo-maker/Brand-info.png'
+import PostPurchaseChanges from '../../img/logo-maker/Post-purchase-changes.png'
+import LifetimeLogoSupport from '../../img/logo-maker/Lifetime-logo-support.png'
+import RoyaltyFreeLogos from '../../img/logo-maker/Royalty-free-logos.png'
+import LogoExample1 from '../../img/logo-maker/LogoExample1.png'
+import LogoExample2 from '../../img/logo-maker/LogoExample2.png'
+import LogoExample3 from '../../img/logo-maker/LogoExample3.png'
+import LogoExample4 from '../../img/logo-maker/LogoExample4.png'
+import LogoExample5 from '../../img/logo-maker/LogoExample5.png'
+import LogoExample6 from '../../img/logo-maker/LogoExample6.png'
 import { AccordionTitle } from 'flowbite-react/lib/esm/components/Accordion/AccordionTitle'
 import { AccordionContent } from 'flowbite-react/lib/esm/components/Accordion/AccordionContent'
 import { AccordionPanel } from 'flowbite-react/lib/esm/components/Accordion/AccordionPanel'
@@ -31,8 +30,8 @@ const LogoMaker = () => {
 	return (
 		<div className='mb-10 gap-y-32 pt-10 w-full flex justify-center items-center flex-col '>
 			<div className='w-7/12 gap-y-10 flex flex-col justify-center items-center'>
-				<p className='text-5xl font-extrabold'>Make a logo with Looka</p>
-				<p className='w-full text-xl text-slate-500 '>Looka Logo Maker combines your logo design preferences with Artificial Intelligence to help you create a custom logo you'll love. All it takes is a few clicks and five minutes.</p>
+				<p className='text-5xl font-extrabold text-center'>Make a logo with Looka</p>
+				<p className='w-full text-xl text-slate-500 text-center'>Looka Logo Maker combines your logo design preferences with Artificial Intelligence to help you create a custom logo you'll love. All it takes is a few clicks and five minutes.</p>
 				<div className='w-full flex gap-x-2 justify-center'>
 					<input placeholder='Enter your company name' className='pl-2 rounded-lg w-6/12 focus:border-indigo-700' type="text" />
 					<button type="button" className="px-6 py-5 text-base font-medium text-center text-white bg-indigo-700 rounded-lg hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-400 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">Let's make a logo!</button>
@@ -78,7 +77,7 @@ const LogoMaker = () => {
 				</div>
 			</div>
 			<div className='w-10/12 flex flex-col items-center gap-y-10'>
-				<p className='w-6/12 text-4xl font-extrabold'>A logo creator that gives you everything a logo designer would</p>
+				<p className='w-6/12 text-4xl font-extrabold text-center'>A logo creator that gives you everything a logo designer would</p>
 				<div className='flex gap -x-10 flex-wrap'>
 					<div className='flex flex-col items-center gap-y-2 pt-3'>
 						<img src={HighResLogos} alt="" />
@@ -239,116 +238,7 @@ const LogoMaker = () => {
 					</AccordionPanel>
 				</Accordion>
 			</div>
-			<Footer>
-				<div className="w-full">
-					<div className="grid w-full grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4">
-						<div>
-							<Footer.Title className='text-lg font-extrabold' title="Products" />
-							<Footer.LinkGroup className='text-sm text-slate-500 flex flex-col gap-y-8 pt-6' col>
-								<Footer.Link href="#">
-									Logo Maker
-								</Footer.Link>
-								<Footer.Link href="#">
-									Brand Kit
-								</Footer.Link>
-								<Footer.Link href="#">
-									Social Media Kit
-								</Footer.Link>
-								<Footer.Link href="#">
-									Business Cards
-								</Footer.Link>
-								<Footer.Link href="#">
-									How it works
-								</Footer.Link>
-								<Footer.Link href="#">
-									Reviews
-								</Footer.Link>
-								<Footer.Link href="#">
-									Business Name Generator
-								</Footer.Link>
-							</Footer.LinkGroup>
-						</div>
-						<div>
-							<Footer.Title className='text-lg font-extrabold' title="Inspiration" />
-							<Footer.LinkGroup className='text-sm text-slate-500 flex flex-col gap-y-8 pt-6' col>
-								<Footer.Link href="#">
-									Blog
-								</Footer.Link>
-								<Footer.Link href="#">
-									Logo Ideas
-								</Footer.Link>
-								<Footer.Link href="#">
-									Logo Colors
-								</Footer.Link>
-								<Footer.Link href="#">
-									Logo Styles
-								</Footer.Link>
-								<Footer.Link href="#">
-									Logo Wiki
-								</Footer.Link>
-							</Footer.LinkGroup>
-						</div>
-						<div>
-							<Footer.Title className='text-lg font-extrabold' title="Company" />
-							<Footer.LinkGroup className='text-sm text-slate-500 flex flex-col gap-y-8 pt-6' col>
-								<Footer.Link href="#">
-									About
-								</Footer.Link>
-								<Footer.Link href="#">
-									Press
-								</Footer.Link>
-								<Footer.Link href="#">
-									Careers
-								</Footer.Link>
-								<Footer.Link href="#">
-									Affiliates
-								</Footer.Link>
-								<Footer.Link href="#">
-									Vulnerability Disclosure Program
-								</Footer.Link>
-							</Footer.LinkGroup>
-						</div>
-						<div>
-							<Footer.Title className='text-lg font-extrabold' title="Support" />
-							<Footer.LinkGroup className='text-sm text-slate-500 flex flex-col gap-y-8 pt-6' col>
-								<Footer.Link href="#">
-									Help Center
-								</Footer.Link>
-								<Footer.Link href="#">
-									Contact
-								</Footer.Link>
-								<Footer.Link href="#">
-									support@looka.com
-								</Footer.Link>
-							</Footer.LinkGroup>
-						</div>
-					</div>
-					<div className="w-full bg-gray-500 px-4 py-6 sm:flex sm:items-center sm:justify-between">
-						<Footer.Copyright
-							by="Looka™"
-							href="#"
-						/>
-						<div className="mt-4 flex space-x-6 sm:mt-0 sm:justify-center">
-							<Footer.Icon
-								href="#"
-								icon={BsFacebook}
-							/>
-							<Footer.Icon
-								href="#"
-								icon={BsInstagram}
-							/>
-							<Footer.Icon
-								href="#"
-								icon={BsTwitter}
-							/>
-							<Footer.Icon
-								href="#"
-								icon={BsGithub}
-							/>
-						</div>
-					</div>
-				</div>
-			</Footer>
+
 		</div >
 	)
 }
