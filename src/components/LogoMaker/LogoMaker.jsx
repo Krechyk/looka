@@ -1,5 +1,11 @@
 import React from 'react'
 import { Accordion } from 'flowbite-react'
+import { AccordionTitle } from 'flowbite-react/lib/esm/components/Accordion/AccordionTitle'
+import { AccordionContent } from 'flowbite-react/lib/esm/components/Accordion/AccordionContent'
+import { AccordionPanel } from 'flowbite-react/lib/esm/components/Accordion/AccordionPanel'
+import { DefaultPlayer as Video } from 'react-html5video'
+import 'react-html5video/dist/styles.css'
+
 import Example1 from '../../img/logo-maker/Example1.png'
 import Example2 from '../../img/logo-maker/Example2.png'
 import Example3 from '../../img/logo-maker/Example3.png'
@@ -21,9 +27,9 @@ import LogoExample3 from '../../img/logo-maker/LogoExample3.png'
 import LogoExample4 from '../../img/logo-maker/LogoExample4.png'
 import LogoExample5 from '../../img/logo-maker/LogoExample5.png'
 import LogoExample6 from '../../img/logo-maker/LogoExample6.png'
-import { AccordionTitle } from 'flowbite-react/lib/esm/components/Accordion/AccordionTitle'
-import { AccordionContent } from 'flowbite-react/lib/esm/components/Accordion/AccordionContent'
-import { AccordionPanel } from 'flowbite-react/lib/esm/components/Accordion/AccordionPanel'
+import LogoMakerVideo from '../../video/LogoMaker.mp4'
+import VideoPoster from '../../img/logo-maker/LogoMakerVideoPoster.webp'
+
 
 
 const LogoMaker = () => {
@@ -57,14 +63,14 @@ const LogoMaker = () => {
 				</div>
 			</div>
 			<div className='flex w-full justify-center'>
-				<div className='w-5/12 flex flex-col items-end justify-center gap-y-5 '>
+				<div className='w-6/12 flex flex-col items-end justify-center gap-y-5 '>
 					<div className='w-6/12 flex gap-x-1'>
 						<p className='text-3xl font-extrabold text-indigo-700'>02.</p>
-						<p className='text-3xl font-extrabold'>Our logo maker is fun</p>
+						<p className='text-3xl font-extrabold w-full'>Our logo maker is fun</p>
 					</div>
 					<p className=' w-6/12 text-sm text-slate-500'>Finalize your colors, fonts, and layouts in our easy-to-use logo editor to make sure you get exactly what you want. Undo any edits you make and then click Save when you’ve created your perfect logo design.</p>
 				</div>
-				<div className='w-6/12'><img className='w-10/12' src={Example5} alt="" /></div>
+				<div className='w-6/12'><img src={Example5} alt="" /></div>
 			</div>
 			<div className='flex w-full justify-center gap-x-10'>
 				<div className='w-6/12 flex justify-end'><img className='w-8/12' src={Example6} alt="" /></div>
@@ -135,11 +141,11 @@ const LogoMaker = () => {
 			</div>
 			<div className='w-full flex flex-col items-center gap-y-8'>
 				<p className='text-4xl font-extrabold'>How to use Looka's logo generator</p>
-				<iframe
-					className='w-8/12 h-96'
-					src="https://www.youtube.com/embed/376GiTKdyTI?iv_load_policy=3&amp;modestbranding=1&amp;hd=1&amp;rel=0&amp;showinfo=0&amp;autoplay=1" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" >
-
-				</iframe>
+				<Video
+					poster={VideoPoster}
+				>
+					<source src={LogoMakerVideo} type='video/webm' />
+				</Video>
 
 			</div>
 			<div className='w-full flex flex-col items-center gap-y-8'>

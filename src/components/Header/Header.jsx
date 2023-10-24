@@ -12,7 +12,7 @@ const Header = () => {
 				<div>How It Works</div>
 				<div>Reviews</div>
 				<div>Logo Ideas</div>
-				<div>Blog</div>
+				<Link to="/blog">Blog</Link>
 			</div>
 			<div className='flex gap-x-2'>
 				<button type="button" className="px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign up</button>
