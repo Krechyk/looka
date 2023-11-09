@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Accordion } from 'flowbite-react'
 import { AccordionTitle } from 'flowbite-react/lib/esm/components/Accordion/AccordionTitle'
 import { AccordionContent } from 'flowbite-react/lib/esm/components/Accordion/AccordionContent'
@@ -33,6 +34,7 @@ import VideoPoster from '../../img/logo-maker/LogoMakerVideoPoster.webp'
 
 
 const LogoMaker = () => {
+	const navigate = useNavigate()
 	return (
 		<div className='mb-10 gap-y-32 pt-10 w-full flex justify-center items-center flex-col '>
 			<div className='w-7/12 gap-y-10 flex flex-col justify-center items-center'>
@@ -40,7 +42,12 @@ const LogoMaker = () => {
 				<p className='w-full text-xl text-slate-500 text-center'>Looka Logo Maker combines your logo design preferences with Artificial Intelligence to help you create a custom logo you'll love. All it takes is a few clicks and five minutes.</p>
 				<div className='w-full flex gap-x-2 justify-center'>
 					<input placeholder='Enter your company name' className='pl-2 rounded-lg w-6/12 focus:border-indigo-700' type="text" />
-					<button type="button" className="px-6 py-5 text-base font-medium text-center text-white bg-indigo-700 rounded-lg hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-400 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">Let's make a logo!</button>
+					<button
+						onClick={() => navigate("/onboarding")}
+						type="button"
+						className="px-6 py-5 text-base font-medium text-center text-white bg-indigo-700 rounded-lg hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-400 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">
+						Let's make a logo!
+					</button>
 				</div>
 			</div>
 			<div className='flex w-full gap-x-10'>

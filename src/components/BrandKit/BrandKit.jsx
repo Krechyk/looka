@@ -25,6 +25,7 @@ import LearnMoreImage5 from '../../img/brand-kit/LearnMoreImage5.png'
 import LearnMoreImage6 from '../../img/brand-kit/LearnMoreImage6.png'
 
 const BrandKit = () => {
+
 	return (
 		<div className='mb-10 gap-y-32 pt-10 w-full flex justify-center items-center flex-col'>
 			<div className='w-6/12 gap-y-10 flex flex-col justify-center items-center'>
@@ -130,7 +131,7 @@ const BrandKit = () => {
 					</div>
 				</div>
 			</div>
-			<Carousel className='flex justify-center' slideInterval={5000}>
+			<Carousel slideInterval={5000}>
 				<img className='w-full h-full flex justify-center' src={CarouselSlide1} alt="..." />
 				<img className='w-full' src={CarouselSlide2} alt="..." />
 				<img className='w-full' src={CarouselSlide3} alt="..." />
