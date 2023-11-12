@@ -1,18 +1,27 @@
 import React, { createContext, useState } from 'react'
 
 export const EditContext = createContext()
+export const useEditContext = () => React.useContext(EditContext);
 
 const Context = (props) => {
 
-	const selectIndustry = ''
+	const [selectIndustry, setSelectIndustry] = useState('')
 	const [likedLogo, setLikedLogo] = useState([])
+	const [likedColor, setLikedColor] = useState([])
+	const [companyName, setCompanyName] = useState('')
+	const [sloganName, setSloganName] = useState('')
+	const [symbolTypes, setSymbolTypes] = useState([])
 
 
-
-	console.log(selectIndustry)
+	// console.log(symbolTypes.length)
 
 	const value = {
-
+		selectIndustry, setSelectIndustry,
+		likedLogo, setLikedLogo,
+		likedColor, setLikedColor,
+		companyName, setCompanyName,
+		sloganName, setSloganName,
+		symbolTypes, setSymbolTypes
 	}
 	return <EditContext.Provider value={value}>{props.children}</EditContext.Provider>
 }

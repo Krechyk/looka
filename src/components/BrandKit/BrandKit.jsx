@@ -131,7 +131,7 @@ const BrandKit = () => {
 					</div>
 				</div>
 			</div>
-			<Carousel slideInterval={5000}>
+			<Carousel className='h-[550px]' slideInterval={5000}>
 				<img className='w-full h-full flex justify-center' src={CarouselSlide1} alt="..." />
 				<img className='w-full' src={CarouselSlide2} alt="..." />
 				<img className='w-full' src={CarouselSlide3} alt="..." />
