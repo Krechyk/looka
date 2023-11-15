@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import { Progress } from 'flowbite-react';
-import * as ReactIcons from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import * as ReactIconsFa from 'react-icons/fa';
+import * as ReactIconsBs from 'react-icons/bs';
+
 
 import { useEditContext } from '../../Context';
+import IconsList from '../IconsList/IconsList';
 import {
 	IndustryList,
 	ImageList,
@@ -12,12 +16,14 @@ import {
 } from '../../info'
 
 const Onboarding = () => {
+
+	const navigate = useNavigate()
 	const [vissibleStep, setVissibleStep] = useState(1);
 	const [show, setShow] = useState(false);
 	const [filteredIndustryList, setFilteredIndusrtyList] = useState(IndustryList)
 	const [progressindicator, setProgressIndicator] = useState(20)
 	const [ownSymbols, setOwnSymbols] = useState(false)
-	const [selectSymbols, setSelectSymbols] = useState('')
+	const [selectNameSymbols, setSelectNameSymbols] = useState('')
 
 	const {
 		selectIndustry, setSelectIndustry,
@@ -25,8 +31,11 @@ const Onboarding = () => {
 		likedColor, setLikedColor,
 		companyName, setCompanyName,
 		sloganName, setSloganName,
-		symbolTypes, setSymbolTypes
+		symbolTypes, setSymbolTypes,
+		selectSymbols, setSelectSymbols,
 	} = useEditContext()
+
+	const allIcons = { ...ReactIconsFa, ...ReactIconsBs }
 
 	const handleFocus = () => {
 		setTimeout(() => {
@@ -78,8 +87,6 @@ const Onboarding = () => {
 		}
 	}
 
-	const iconNames = Object.keys(ReactIcons)
-	console.log(iconNames)
 	return (
 		<>
 			<Progress className='mt-2' progress={progressindicator} />
@@ -230,9 +237,9 @@ const Onboarding = () => {
 								</div>
 								{
 									symbolTypes.length !== 0 ?
-										<button className='w-[200px] max-h-20 pt-4 pb-4 border rounded-xl text-lg text-white bg-blue-600 text-center'>Continue {'->'} </button>
+										<button onClick={() => navigate("/explore")} className='w-[200px] max-h-20 pt-4 pb-4 border rounded-xl text-lg text-white bg-blue-600 text-center'>Continue {'->'} </button>
 										:
-										<button disabled className='w-[200px] max-h-20 pt-4 pb-4 border rounded-xl text-lg text-white bg-blue-400 text-center'>Continue {'->'} </button>
+										<button onClick={() => navigate("/explore")} className='w-[200px] max-h-20 pt-4 pb-4 border rounded-xl text-lg text-blue-600 bg-slate-200 text-center'>Skip {'->'} </button>
 								}
 							</div>
 							<div
@@ -243,21 +250,26 @@ const Onboarding = () => {
 							</div>
 							<div className='w-[800px] flex justify-center'>
 								<div className='flex items-center'>
-									<div className='flex items-center relative w-full'>
+									<div className='z-1 flex items-center relative w-full'>
 										<input
-											defaultValue={selectSymbols}
+											defaultValue={selectNameSymbols}
 											className='rounded-xl  border-slate-300 w-[500px] h-[40px]'
 											type="text"
 											placeholder='Search for symbols...'
 										/>
-										<button className='w-[80px] h-[30px] rounded-lg text-white bg-blue-600 border absolute right-1 ' >Search</button>
+										<button className='z-2 w-[80px] h-[30px] rounded-lg text-white bg-blue-600 border absolute left-[83%] ' >Search</button>
 									</div>
-									<div className='flex w-full gap-x-4 pl-4'>
-										<div className='w-[40px] h-[40px] border-slate-300 border-dashed border-2 rounded-md'></div>
-										<div className='w-[40px] h-[40px] border-slate-300 border-dashed border-2 rounded-md'></div>
-										<div className='w-[40px] h-[40px] border-slate-300 border-dashed border-2 rounded-md'></div>
-										<div className='w-[40px] h-[40px] border-slate-300 border-dashed border-2 rounded-md'></div>
-										<div className='w-[40px] h-[40px] border-slate-300 border-dashed border-2 rounded-md'></div>
+									<div className='flex flex-row gap-x-4 pl-4'>
+										{[0, 1, 2, 3, 4].map((el) => {
+											const IconComponent = allIcons[selectSymbols[el]]
+											console.log(IconComponent)
+											return (
+												<div key={el} className='w-[40px] h-[40px] border-slate-300 border-dashed border-2 rounded-md flex justify-center items-center'>
+													{IconComponent ? <IconComponent className size={30} /> : null}
+												</div>
+											)
+										})
+										}
 									</div>
 								</div>
 							</div>
@@ -265,7 +277,7 @@ const Onboarding = () => {
 								{SymbolVariationList.map((el) => {
 									return (
 										<div
-											onClick={() => setSelectSymbols(el.name)}
+											onClick={() => setSelectNameSymbols(el.name)}
 											key={el.id}
 											className={`text-xs border-slate-300 rounded-2xl border-2 px-4 py-1 cursor-pointer ${selectSymbols.includes(el.name) ? 'text-white bg-blue-600' : null}`}
 										>
@@ -275,17 +287,7 @@ const Onboarding = () => {
 								})
 								}
 							</div>
-							{/* <div>
-								{
-									iconNames.map((el, index) => {
-										return (
-											<div key={index}>
-												<img src={el} alt="" />
-											</div>
-										)
-									})
-								}
-							</div> */}
+							<IconsList />
 						</div>
 						:
 						<div className='pt-8 w-full flex flex-col items-center gap-y-8'>
@@ -296,9 +298,9 @@ const Onboarding = () => {
 								</div>
 								{
 									symbolTypes.length !== 0 ?
-										<button className='w-[200px] max-h-20 pt-4 pb-4 border rounded-xl text-lg text-white bg-blue-600 text-center'>Continue {'->'} </button>
+										<button onClick={() => navigate("/explore")} className='w-[200px] max-h-20 pt-4 pb-4 border rounded-xl text-lg text-white bg-blue-600 text-center'>Continue {'->'} </button>
 										:
-										<button disabled className='w-[200px] max-h-20 pt-4 pb-4 border rounded-xl text-lg text-white bg-blue-400 text-center'>Continue {'->'} </button>
+										<button onClick={() => navigate("/explore")} className='w-[200px] max-h-20 pt-4 pb-4 border rounded-xl text-lg text-white bg-blue-400 text-center'>Continue {'->'} </button>
 								}
 							</div>
 							<div className='flex flex-wrap w-6/12 gap-x-8 gap-y-6'>

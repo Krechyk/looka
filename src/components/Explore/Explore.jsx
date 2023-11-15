@@ -1,0 +1,94 @@
+import React from 'react'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import Colors from '../../img/explore/Colors.jpeg'
+import { MdKeyboardArrowDown } from "react-icons/md";
+import { FaRepeat } from "react-icons/fa6";
+import { CgCheck } from "react-icons/cg";
+
+import { useEditContext } from '../../Context';
+import { ColorList } from '../../info';
+
+const Explore = () => {
+	const navigate = useNavigate()
+	const [showColors, setShowColors] = useState(false);
+
+	const {
+		selectIndustry, setSelectIndustry,
+		likedLogo, setLikedLogo,
+		likedColor, setLikedColor,
+		companyName, setCompanyName,
+		sloganName, setSloganName,
+		symbolTypes, setSymbolTypes,
+		selectSymbols, setSelectSymbols
+	} = useEditContext()
+
+	const selectedColor = (name) => {
+		if (likedColor.includes(name)) {
+			const filteredLikes = likedColor.filter((item) => item !== name)
+			setLikedColor(filteredLikes)
+		} else {
+			setLikedColor([...likedColor, name])
+		}
+	}
+
+	return (
+		<div className='flex flex-col items-center gap-y-10'>
+			<div className='flex justify-center gap-x-3'>
+				<input
+					className='h-[35px] w-[180px] rounded-xl border-slate-300'
+					type="text"
+					placeholder='Company Name'
+					defaultValue={companyName}
+				/>
+				<input
+					className='h-[35px] w-[180px] rounded-xl border-slate-300'
+					type="text"
+					placeholder='Slogan'
+					defaultValue={sloganName}
+				/>
+				<button onBlur={() => setShowColors(false)} className='relative h-[35px] w-[60px] border-[1px] border-slate-300 rounded-xl flex items-center justify-center'>
+					<div onClick={() => setShowColors(!showColors)} className='flex items-center gap-1'>
+						<img className='w-[18px]' src={Colors} />
+						<MdKeyboardArrowDown />
+					</div>
+					<p className='w-[18px] h-[18px] rounded-xl bg-neutral-900 text-white  absolute bottom-6 right-1 text-xs border-2'>{likedColor.length}</p>
+					{showColors ?
+						<div className='w-[100px] h-[100px] border-2  bg-white absolute top-10 rounded-xl border-slate-200 flex flex-wrap gap-2 justify-center items-center'>
+							{ColorList.map((el) => {
+								return (
+									<div
+										key={el.id}
+										onClick={() => selectedColor(el.name)}
+										className='w-[23px] h-[23px] rounded-md flex justify-center items-center'
+										style={{ backgroundColor: `${el.color}` }}
+									>
+										{likedColor.includes(el.name) ? <CgCheck size={25} color='white' /> : null}
+									</div>
+								)
+							})
+							}
+
+						</div>
+						: null
+					}
+				</button>
+				<button className='text-xs h-[35px] w-[120px] border-[1px] border-slate-300 rounded-xl flex justify-center items-center gap-2'>
+					<p>Symbols</p>
+					<MdKeyboardArrowDown />
+				</button>
+				<button onClick={() => navigate('/editor')} className='text-xs h-[35px] w-[120px] border-[1px] border-slate-300 rounded-xl flex justify-center items-center gap-2'>
+					<FaRepeat />
+					<p>Upgrate</p>
+				</button>
+			</div>
+			<div className='w-7/12'>
+				<p className='pb-4 text-3xl font-extrabold '>Enter your company name</p>
+				<p className=' text-xl text-slate-500 '>You can always change these later</p>
+			</div>
+		</div>
+	)
+}
+
+export default Explore
