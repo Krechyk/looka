@@ -3,6 +3,7 @@ import { Progress } from 'flowbite-react';
 import { useNavigate } from 'react-router-dom';
 import * as ReactIconsFa from 'react-icons/fa';
 import * as ReactIconsBs from 'react-icons/bs';
+import { ImCross } from "react-icons/im";
 
 
 import { useEditContext } from '../../Context';
@@ -86,6 +87,11 @@ const Onboarding = () => {
 			setSymbolTypes([...symbolTypes, name])
 		}
 	}
+	const selectedIcon = (name) => {
+		const filteredLikes = selectSymbols.filter((item) => item !== name)
+		setSelectSymbols(filteredLikes)
+
+	}
 
 	return (
 		<>
@@ -162,7 +168,7 @@ const Onboarding = () => {
 					</div>
 				</div>
 			}
-			{vissibleStep === 3 &&
+			{vissibleStep === 3 && //pick colors 
 				<div className='pt-8 w-full flex flex-col items-center gap-y-8'>
 					<div className='w-6/12 flex justify-between items-center'>
 						<div>
@@ -195,7 +201,7 @@ const Onboarding = () => {
 					</div>
 				</div>
 			}
-			{vissibleStep === 4 &&
+			{vissibleStep === 4 && //pick company and slogan 
 				<div className='pt-8 w-full flex flex-col items-center gap-y-8'>
 					<div className='w-6/12 flex justify-between items-center'>
 						<div>
@@ -227,7 +233,7 @@ const Onboarding = () => {
 					</div>
 				</div>
 			}
-			{vissibleStep === 5 &&
+			{vissibleStep === 5 && // pick sumbol
 				<div>
 					{ownSymbols ?
 						<div className='pt-8 w-full flex flex-col items-center gap-y-8'>
@@ -236,7 +242,7 @@ const Onboarding = () => {
 									<p className='pb-4 text-3xl font-extrabold '>Pick up to 5 symbols</p>
 								</div>
 								{
-									symbolTypes.length !== 0 ?
+									selectSymbols.length !== 0 ?
 										<button onClick={() => navigate("/explore")} className='w-[200px] max-h-20 pt-4 pb-4 border rounded-xl text-lg text-white bg-blue-600 text-center'>Continue {'->'} </button>
 										:
 										<button onClick={() => navigate("/explore")} className='w-[200px] max-h-20 pt-4 pb-4 border rounded-xl text-lg text-blue-600 bg-slate-200 text-center'>Skip {'->'} </button>
@@ -262,10 +268,19 @@ const Onboarding = () => {
 									<div className='flex flex-row gap-x-4 pl-4'>
 										{[0, 1, 2, 3, 4].map((el) => {
 											const IconComponent = allIcons[selectSymbols[el]]
-											console.log(IconComponent)
 											return (
-												<div key={el} className='w-[40px] h-[40px] border-slate-300 border-dashed border-2 rounded-md flex justify-center items-center'>
+												<div
+													key={el}
+													className=' w-[40px] h-[40px] border-slate-300 border-dashed border-2 rounded-md flex justify-center items-center relative z-2 '
+
+												>
 													{IconComponent ? <IconComponent className size={30} /> : null}
+													<div
+														onClick={() => selectedIcon(selectSymbols[el])}
+														className=' absolute w-full h-full flex justify-center opacity-0 hover:opacity-100 items-center hover:bg-[#00000076]'
+													>
+														<ImCross color='white' />
+													</div>
 												</div>
 											)
 										})

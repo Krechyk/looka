@@ -14,9 +14,9 @@ const Context = (props) => {
 	const [symbolTypes, setSymbolTypes] = useState([])
 
 	const [selectSymbols, setSelectSymbols] = useState([])
+	const [selectParameters, setSelectParameters] = useState({})
 
 
-	console.log(selectSymbols.length)
 
 	const value = {
 		selectIndustry, setSelectIndustry,
@@ -25,7 +25,8 @@ const Context = (props) => {
 		companyName, setCompanyName,
 		sloganName, setSloganName,
 		symbolTypes, setSymbolTypes,
-		selectSymbols, setSelectSymbols
+		selectSymbols, setSelectSymbols,
+		selectParameters, setSelectParameters
 	}
 	return <EditContext.Provider value={value}>{props.children}</EditContext.Provider>
 }

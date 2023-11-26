@@ -122,13 +122,13 @@ export const ColorList = [
 		id: 7,
 	},
 	{
-		name: 'Aqua',
-		color: '#0ff',
+		name: 'Brown',
+		color: '#8B4513',
 		id: 8,
 	},
 	{
-		name: 'Olive',
-		color: '#808000',
+		name: 'Aqua',
+		color: '#00ffff',
 		id: 9,
 	},
 ]
@@ -248,3 +248,31 @@ export const SymbolVariationList = [
 		id: 14,
 	},
 ]
+export const EditInformation = [
+	{
+		background_color: 'blue', //blue
+		flex_direction: 'column',
+		id: 1,
+	},
+	{
+		background_color: 'green', //green
+		flex_direction: 'column-reverse',
+		id: 2,
+	},
+	{
+		background_color: 'red', // red-500
+		flex_direction: 'row-reverse',
+		id: 3,
+	},
+]
+export const ColorsShade = {
+	Gray: ['#DCDCDC', '#D3D3D3', '#C0C0C0', '#A9A9A9', '	#696969', '#778899', '#808080', '#708090'],
+	Yellow: ['#FFD700', '#FFFACD', '#FFE4B5', '#FFDAB9', '#EEE8AA', '#F0E68C', '#BDB76B', '#FAFAD2'],
+	Red: ['#FFA07A', '#FA8072', '#E9967A', '#F08080', '#CD5C5C', '#DC143C', '#FF0000', '#B22222'],
+	Green: ['#ADFF2F', '#7FFF00', '#00FF00', '#98FB98', '#00FA9A', '#3CB371', '#00FF7F', '#006400'],
+	Blue: ['#5F9EA0', '#4682B4', '#B0E0E6', '#87CEFA', '#6495ED', '#1E90FF', '#4169E1', '#0000FF'],
+	Purple: ['#FF00FF', '#BA55D3', '#9400D3', '#8A2BE2', '#8B008B', '#7B68EE', '#483D8B', '#663399'],
+	Orange: ['#E9967A', '#FFA550', '#FFA500', '#FF7F50', '#FF6347', '	#FF4500', '#D2691E', '#DEB887'],
+	Brown: ['#FFDEAD', '#DEB887', '#BC8F8F', '#D2B48C', '#F4A460', '#8B4513', '#A0522D', '#CD853F'],
+	Aqua: ['#00FFFF', '#AFEEEE', '#7FFFD4', '#40E0D0', '#48D1CC', '#00CED1', '#00BFFF', '#87CEFA'],
+}

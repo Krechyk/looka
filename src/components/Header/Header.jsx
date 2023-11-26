@@ -4,7 +4,7 @@ import logo from '../../img/logo.png'
 
 const Header = () => {
 	return (
-		<div className='h-16 flex justify-between items-center'>
+		<div className='h-[6vh] flex justify-between items-center'>
 			<div><img src={logo} alt="" /></div>
 			<div className='flex gap-8 text-xs'>
 				<Link to="/" >Logo Maker</Link>
