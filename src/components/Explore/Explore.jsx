@@ -111,7 +111,7 @@ const Explore = () => {
 							}}
 						>
 							<p
-								className='italic font-[cursive] uppercase'
+								className='italic font-[cursive] uppercase text-[16px]'
 								style={{ color: `${template.name_text_color}`, }}
 							>
 								{companyName}

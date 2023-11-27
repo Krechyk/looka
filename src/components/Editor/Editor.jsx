@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { RangeSlider } from 'flowbite-react';
 import EditorLowercaseButton from '../common/EditorLowercaseButton';
 import EditorOptionsButton from '../common/EditorOptionsButton';
-import { ColorList, ColorsShade } from '../../info';
+import { ColorList, ColorsShade, FontImageList, FontTypesList } from '../../info';
 import { useEditContext } from '../../Context';
 
 import { ChromePicker } from 'react-color'
@@ -27,9 +27,14 @@ import { RiDeleteBinLine } from "react-icons/ri";
 
 
 
+
 const Editor = () => {
 	const [showBlockEditor, setShowBlockEditor] = useState(0)
+	const [showSizeNameSlider, setShowSizeNameSlider] = useState(false)
+	const [showSpacingSlider, setShowSpacingSlider] = useState(false)
 	const [visiblePicker, setVisiblePicker] = useState(true)
+	const [showFontTypesName, setShowFontTypesName] = useState(false)
+
 	const [ideasButtonSelected, setIdeasButtonSelected] = useState("Font Pairs")
 	const [backgroundColorsSelected, setBackgroundColorsSelected] = useState('Green')
 
@@ -37,6 +42,7 @@ const Editor = () => {
 	const [nameColor, setNameColor] = useState('Green')
 	const [nameLowercaseButton, setNameLowercaseButton] = useState('abc')
 	const [nameSize, setNameSize] = useState(1)
+	const [nameSpacing, setNameSpacing] = useState(0.2)
 
 	const [sloganButtonSelected, setSloganButtonSelected] = useState("Font Types")
 	const [symbolButtonSelected, setSymbolButtonSelected] = useState("Symbols")
@@ -74,7 +80,10 @@ const Editor = () => {
 	const handleSize = (e) => {
 		setNameSize(e.target.value)
 	}
-	console.log(nameButtonSelected)
+	const handleSpacing = (e) => {
+		setNameSpacing(e.target.value)
+	}
+	console.log(showSizeNameSlider)
 	useEffect(() => {
 		const tempTemplate = localStorage.getItem('selectedTemplate')
 		if (tempTemplate) {
@@ -313,7 +322,17 @@ const Editor = () => {
 															flexDirection: `${selectParameters.direction}`
 														}}
 													>
-														<div>{companyName.length === 0 ? 'Your Company Name' : companyName}</div>
+														<div
+															className='text-center'
+															style={{
+																color: `${selectParameters.name_text_color}`,
+																fontSize: `${16 * nameSize}px`,
+																letterSpacing: `${10 * nameSpacing}px`,
+																textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+															}}
+														>
+															{companyName.length === 0 ? 'Your Company Name' : companyName}
+														</div>
 														<IconComponent size={40} />
 														<div>{sloganName.length === 0 ? 'Your Slogan' : sloganName}</div>
 													</div>
@@ -355,9 +374,26 @@ const Editor = () => {
 									<div className='flex justify-start py-2 mx-5'>
 										<div>
 											{nameButtonSelected === 'Font Types' &&
-												<div className='flex items-center py-2 px-4 border-black border-2 rounded-3xl text-sm'>
-													<p>Suggested (40 Results)</p>
+												<div className='flex items-center py-2 px-4 border-black border-2 rounded-3xl text-sm relative cursor-pointer'>
+													<p onClick={() => setShowFontTypesName(!showFontTypesName)} >
+														Suggested (40 Results)
+													</p>
 													<MdKeyboardArrowDown />
+													{showFontTypesName ?
+														<div className='absolute top-12 left-[-24px] w-[300px] flex flex-wrap justify-center border-2 gap-x-2 gap-y-[1px] rounded-2xl shadow-2xl py-[2px]'>
+															{FontImageList.map((el) => {
+																return (
+																	<div
+																		className='w-[140px] h-[30px] px-4 flex items-center hover:bg-gray-100 rounded-xl'
+																		key={el.id}
+																	>
+																		<img src={el.img} alt="" />
+																	</div>
+																)
+															})}
+														</div>
+														: null
+													}
 												</div>
 											}
 										</div>
@@ -392,7 +428,13 @@ const Editor = () => {
 																		}}
 																	>
 																		<div
-																			style={{ color: `${el}` }}
+																			className='text-center'
+																			style={{
+																				color: `${el}`,
+																				fontSize: `${16 * nameSize}px`,
+																				letterSpacing: `${10 * nameSpacing}px`,
+																				textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																			}}
 																		>{companyName.length === 0 ? 'Your Company Name' : companyName}</div>
 																		<IconComponent size={40} />
 																		<div>{sloganName.length === 0 ? 'Your Slogan' : sloganName}</div>
@@ -404,6 +446,9 @@ const Editor = () => {
 											}
 
 										</div>
+									</div>
+									<div>
+
 									</div>
 								</>
 								:
@@ -498,36 +543,71 @@ const Editor = () => {
 								/>
 								<button className='h-[28px] w-[50px] text-blue-600 bg-white rounded-2xl text-sm absolute top-1 right-1'>Stack</button>
 							</div>
-							<div className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl cursor-pointer text-sm relative'>
-								Size
-								<div className='absolute top-10 w-[100px]'>
-									<p>Size: {nameSize}</p>
-									<RangeSlider
-										min={0.05}
-										max={2.25}
-										step={0.1}
-										onChange={handleSize}
-									/>
-								</div>
-							</div>
-							<div className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl cursor-pointer' ><CgFontSpacing size={20} /></div>
-							<EditorLowercaseButton
-								names={["ABC", "abc"]}
-								onSelect={setNameLowercaseButton}
-								selected={nameLowercaseButton}
-							/>
-							<div className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl cursor-pointer' ><RiDeleteBinLine size={20} /></div>
+							<button  //FontSize
+								onBlur={() => setShowSizeNameSlider(false)}
+								className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl cursor-pointer text-sm relative'
+							>
+								<p onClick={() => setShowSizeNameSlider(!showSizeNameSlider)}>Size</p>
+								{showSizeNameSlider ?
+									<div className='absolute top-10 w-[160px] border-[1px] py-2 px-4 shadow-2xl rounded-xl flex flex-col items-start'>
+										<p>Size: {nameSize}</p>
+										<RangeSlider
+											value={nameSize}
+											min={0.05}
+											max={2.25}
+											step={0.05}
+											onChange={handleSize}
+										/>
+									</div>
+									: null
+								}
+							</button>
+							<button  //LetterSpacing
+								onBlur={() => setShowSpacingSlider(false)}
+								className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl cursor-pointer'
+							>
+								<CgFontSpacing size={20} onClick={() => setShowSpacingSlider(!showSpacingSlider)} />
+								{showSpacingSlider ?
+									<div className='absolute top-10 w-[160px] border-[1px] py-2 px-4 shadow-2xl rounded-xl flex flex-col items-start'>
+										<p>Size: {nameSpacing}</p>
+										<RangeSlider
+											value={nameSpacing}
+											min={-0.50}
+											max={2}
+											step={0.05}
+											onChange={handleSpacing}
+										/>
+									</div>
+									: null
+								}
+							</button>
+							<button //LowerCase 
+							>
+								<EditorLowercaseButton
+									names={["ABC", "abc"]}
+									onSelect={setNameLowercaseButton}
+									selected={nameLowercaseButton}
+								/>
+							</button>
+							<div className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl cursor-pointer' ><RiDeleteBinLine size={20} color='gray' /></div>
 						</div>
 					}
 					<div
 						className='border-2 min-w-[400px] w-8/12 h-[400px] rounded-xl flex justify-center items-center gap-2'
 						style={{
 							background: `${selectParameters.background}`,
-							flexDirection: `${selectParameters.direction}`
+							flexDirection: `${selectParameters.direction}`,
 						}}
 					>
 						<div
-							style={{ color: `${selectParameters.name_text_color}` }}
+							className='text-center'
+							style={{
+								color: `${selectParameters.name_text_color}`,
+								fontSize: `${32 * nameSize}px`,
+								letterSpacing: `${20 * nameSpacing}px`,
+								textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+								// fontFamily: `${'Texturina'}`
+							}}
 						>
 							{companyName.length === 0 ? 'Your Company Name' : companyName}
 						</div>

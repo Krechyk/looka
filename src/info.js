@@ -8,6 +8,15 @@ import Example7 from '../src/img/onboarding/Example7.png'
 import Example8 from '../src/img/onboarding/Example8.png'
 import Example9 from '../src/img/onboarding/Example9.png'
 
+import serif from './img/editor/font-types/serif.svg'
+import funky from './img/editor/font-types/funky.svg'
+import bubbly from './img/editor/font-types/bubbly.svg'
+import modern from './img/editor/font-types/modern.svg'
+import sans_serif from './img/editor/font-types/sans-serif.svg'
+import skript from './img/editor/font-types/script.svg'
+import slab from './img/editor/font-types/slab.svg'
+import suggesting from './img/editor/font-types/suggested.svg'
+
 
 export const IndustryList = [
 	{
@@ -250,9 +259,9 @@ export const SymbolVariationList = [
 ]
 export const EditInformation = [
 	{
-		name_text_color: 'orange',
 		background_color: 'blue', //blue
 		flex_direction: 'column',
+		name_text_color: 'orange',
 		id: 1,
 	},
 	{
@@ -278,4 +287,43 @@ export const ColorsShade = {
 	Orange: ['#E9967A', '#FFA550', '#FFA500', '#FF7F50', '#FF6347', '	#FF4500', '#D2691E', '#DEB887'],
 	Brown: ['#FFDEAD', '#DEB887', '#BC8F8F', '#D2B48C', '#F4A460', '#8B4513', '#A0522D', '#CD853F'],
 	Aqua: ['#00FFFF', '#AFEEEE', '#7FFFD4', '#40E0D0', '#48D1CC', '#00CED1', '#00BFFF', '#87CEFA'],
+}
+export const FontImageList = [
+	{
+		img: serif,
+		id: 1,
+	},
+	{
+		img: sans_serif,
+		id: 2,
+	},
+	{
+		img: slab,
+		id: 3,
+	},
+	{
+		img: bubbly,
+		id: 4,
+	},
+	{
+		img: modern,
+		id: 5,
+	},
+	{
+		img: funky,
+		id: 6,
+	},
+	{
+		img: suggesting,
+		id: 7,
+	},
+	{
+		img: skript,
+		id: 8,
+	},
+]
+export const FontTypesList = {
+	serif: ['Noto Serif', 'Grenze', 'Noto Serif Display', 'Noto Serif Tamil', 'Roboto Serif', 'Texturina',],
+	slab: ['Rokkitt', 'Aleo'],
+	sans_serif: ['Montserrat', 'Roboto Condensed', 'Nunito', 'Kanit', 'Barlow', 'Jost',]
 }
