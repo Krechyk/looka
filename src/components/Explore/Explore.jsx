@@ -34,12 +34,11 @@ const Explore = () => {
 			setLikedColor([...likedColor, name])
 		}
 	}
-	const editTransition = (background, direction, nameIcon) => {
+	const editTransition = (background, direction, nameIcon, name_text_color) => {
 		setSelectParameters({ background, direction, nameIcon })
-		localStorage.setItem('selectedTemplate', JSON.stringify({ background, direction, nameIcon }))
+		localStorage.setItem('selectedTemplate', JSON.stringify({ background, direction, nameIcon, name_text_color }))
 		navigate('/editor')
 	}
-	console.log(selectParameters)
 	return (
 		<div className='flex flex-col items-center gap-y-10'>
 			<div className='flex justify-center gap-x-3'>
@@ -103,7 +102,7 @@ const Explore = () => {
 					const IconComponent = allIcons[name]
 					return (
 						<div
-							onClick={() => editTransition(template.background_color, template.flex_direction, name)}
+							onClick={() => editTransition(template.background_color, template.flex_direction, name, template.name_text_color)}
 							key={template.id}
 							className='border-2 w-[240px] h-[180px] rounded-xl flex justify-center items-center gap-2'
 							style={{
@@ -111,7 +110,12 @@ const Explore = () => {
 								flexDirection: `${template.flex_direction}`
 							}}
 						>
-							<p className='italic font-[cursive] uppercase'>{companyName}</p>
+							<p
+								className='italic font-[cursive] uppercase'
+								style={{ color: `${template.name_text_color}`, }}
+							>
+								{companyName}
+							</p>
 							<IconComponent size={50} />
 							<p>{sloganName}</p>
 						</div>

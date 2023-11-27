@@ -250,16 +250,19 @@ export const SymbolVariationList = [
 ]
 export const EditInformation = [
 	{
+		name_text_color: 'orange',
 		background_color: 'blue', //blue
 		flex_direction: 'column',
 		id: 1,
 	},
 	{
+		name_text_color: 'black',
 		background_color: 'green', //green
 		flex_direction: 'column-reverse',
 		id: 2,
 	},
 	{
+		name_text_color: 'blue',
 		background_color: 'red', // red-500
 		flex_direction: 'row-reverse',
 		id: 3,
