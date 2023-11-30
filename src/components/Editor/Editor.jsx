@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { useRef } from 'react';
 
 import { RangeSlider } from 'flowbite-react';
 import EditorLowercaseButton from '../common/EditorLowercaseButton';
 import EditorOptionsButton from '../common/EditorOptionsButton';
+import EditorInternalPositionButton from '../common/EditorInternalPositionButton';
+import EditorExternalPositionButton from '../common/EditorExternalPositionButton';
 import { ColorList, ColorsShade, FontImageList, FontTypesList } from '../../info';
 import { useEditContext } from '../../Context';
 
@@ -15,25 +18,33 @@ import { TfiLayoutMenuV } from "react-icons/tfi";
 import { HiArrowUturnLeft, HiArrowUturnRight } from "react-icons/hi2";
 import { WiCloudDown } from "react-icons/wi";
 import { GoContainer } from "react-icons/go";
-import { FaCrown, FaEye, FaHistory } from "react-icons/fa";
+import {
+	FaCrown, FaEye, FaHistory,
+	FaSearch, FaArchway, FaAward, FaAtom,
+	FaBirthdayCake, FaCity, FaCoins,
+	FaDungeon, FaFortAwesomeAlt
+} from "react-icons/fa";
 import { DiSmashingMagazine } from "react-icons/di";
 import { TiThMenu } from "react-icons/ti";
 import { GiStarKey } from "react-icons/gi";
 import { MdKeyboardArrowDown, MdOutlineOpenInFull } from "react-icons/md";
 import { BiDroplet, BiSolidEditAlt } from "react-icons/bi";
-import { PiSelectionBackgroundBold, PiNotionLogo } from "react-icons/pi";
+import {
+	PiSelectionBackgroundBold, PiNotionLogo,
+	PiAlignBottomSimpleBold, PiAlignTopSimpleBold,
+	PiAlignRightSimpleBold, PiAlignLeftSimpleBold
+} from "react-icons/pi";
 import { CgFontSpacing } from "react-icons/cg";
 import { RiDeleteBinLine } from "react-icons/ri";
-
-
+import { LuUnfoldHorizontal, LuUnfoldVertical } from "react-icons/lu";
 
 
 const Editor = () => {
 	const [showBlockEditor, setShowBlockEditor] = useState(0)
-	const [showSizeNameSlider, setShowSizeNameSlider] = useState(false)
+	const [showSizeSlider, setShowSizeSlider] = useState(false)
 	const [showSpacingSlider, setShowSpacingSlider] = useState(false)
 	const [visiblePicker, setVisiblePicker] = useState(true)
-	const [showFontTypesName, setShowFontTypesName] = useState(false)
+	const [showFontTypes, setShowFontTypes] = useState(false)
 
 	const [ideasButtonSelected, setIdeasButtonSelected] = useState("Font Pairs")
 	const [backgroundColorsSelected, setBackgroundColorsSelected] = useState('Green')
@@ -41,11 +52,28 @@ const Editor = () => {
 	const [nameButtonSelected, setNameButtonSelected] = useState("Font Types")
 	const [nameColor, setNameColor] = useState('Green')
 	const [nameLowercaseButton, setNameLowercaseButton] = useState('abc')
+	const [nameFontTypesSelected, setNameFontTypesSelected] = useState('serif')
 	const [nameSize, setNameSize] = useState(1)
 	const [nameSpacing, setNameSpacing] = useState(0.2)
 
 	const [sloganButtonSelected, setSloganButtonSelected] = useState("Font Types")
+	const [sloganFontTypesSelected, setSloganFontTypesSelected] = useState('sans-serif')
+	const [sloganColor, setSloganColor] = useState('Blue')
+	const [sloganLowercaseButton, setSloganLowercaseButton] = useState('abc')
+	const [sloganSize, setSloganSize] = useState(1)
+	const [sloganSpacing, setSloganSpacing] = useState(0.1)
+
 	const [symbolButtonSelected, setSymbolButtonSelected] = useState("Symbols")
+	const [symbolSelectedInternalPosition, setSymbolSelectedInternalPosition] = useState(0)
+	const [symbolSelectedExternalPosition, setSymbolSelectedExternalPosition] = useState()
+	const [selectedVertical, setSelectedVertical] = useState(false)
+	const [selectedHorizontal, setSelectedHorizontal] = useState(false)
+	const [symbolColor, setSymbolColor] = useState('black')
+
+
+	const fontSizeSliderRef = useRef(null)
+	const spacingSliderRef = useRef(null)
+	const fontTypesSliderRef = useRef(null)
 
 	const {
 		companyName, setCompanyName,
@@ -57,8 +85,8 @@ const Editor = () => {
 
 	const allIcons = { ...ReactIconsFa, ...ReactIconsBs }
 	const stepEditor = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-
 	const IconComponent = allIcons[selectParameters?.nameIcon]
+	const iconArray = ['FaArchway', 'FaAward', 'FaAtom', 'FaBirthdayCake', 'FaCity', 'FaCoins', 'FaDungeon', 'FaFortAwesomeAlt']
 
 	const editBackground = (el) => {
 		setSelectParameters({ ...selectParameters, background: el })
@@ -70,25 +98,81 @@ const Editor = () => {
 	const editNameColor = (el) => {
 		setSelectParameters({ ...selectParameters, name_text_color: el })
 	}
-	const textColorHandleChange = (color) => {
+	const nameColorHandleChange = (color) => {
 		setSelectParameters({ ...selectParameters, name_text_color: color.hex })
+	}
+	const editNameFontType = (el) => {
+		setSelectParameters({ ...selectParameters, name_font_types: el })
+	}
+	const editSloganColor = (el) => {
+		setSelectParameters({ ...selectParameters, slogan_text_color: el })
+	}
+	const sloganColorHandleChange = (color) => {
+		setSelectParameters({ ...selectParameters, slogan_text_color: color.hex })
+	}
+	const editSloganFontType = (el) => {
+		setSelectParameters({ ...selectParameters, slogan_font_types: el })
+	}
+	const editIcon = (el) => {
+		setSelectParameters({ ...selectParameters, nameIcon: el })
+	}
+	const editIconColor = (el) => {
+		setSelectParameters({ ...selectParameters, symbol_color: el })
+	}
+	const symbolColorHandleChange = (color) => {
+		setSelectParameters({ ...selectParameters, symbol_color: color.hex })
 	}
 	const companyNameHandleChange = (e) => {
 		setCompanyName(e.target.value)
 	}
-
-	const handleSize = (e) => {
+	const sloganNameHandleChange = (e) => {
+		setSloganName(e.target.value)
+	}
+	const handleNameSize = (e) => {
 		setNameSize(e.target.value)
 	}
-	const handleSpacing = (e) => {
+	const handleNameSpacing = (e) => {
 		setNameSpacing(e.target.value)
 	}
-	console.log(showSizeNameSlider)
+	const handleSloganSize = (e) => {
+		setSloganSize(e.target.value)
+	}
+	const handleSloganSpacing = (e) => {
+		setSloganSpacing(e.target.value)
+	}
+	const selectPositionIndex = (index) => {
+		setSymbolSelectedInternalPosition(index)
+		if (index === 0) {
+			setSelectedHorizontal(!selectedHorizontal)
+		} else {
+			setSelectedVertical(!selectedVertical)
+		}
+	}
+	console.log(iconArray)
+
 	useEffect(() => {
 		const tempTemplate = localStorage.getItem('selectedTemplate')
 		if (tempTemplate) {
 			setSelectParameters(JSON.parse(tempTemplate))
 		}
+	}, [])
+	useEffect(() => {
+		const handleClickOutsideToolbar = (event) => {
+			if (fontSizeSliderRef.current && !fontSizeSliderRef.current.contains(event.target)) {
+				setShowSizeSlider(false);
+			}
+			if (spacingSliderRef.current && !spacingSliderRef.current.contains(event.target)) {
+				setShowSpacingSlider(false);
+			}
+			if (fontTypesSliderRef.current && !fontTypesSliderRef.current.contains(event.target)) {
+				setShowFontTypes(false);
+			}
+		};
+		document.addEventListener('mousedown', handleClickOutsideToolbar);
+
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutsideToolbar);
+		};
 	}, [])
 	return (
 		<div>
@@ -202,11 +286,12 @@ const Editor = () => {
 						</div>
 					</div>
 				</div>
-				<div>{showBlockEditor === 0 && // Preview
-					<div>
+				<div>
+					{showBlockEditor === 0 && // Preview
+						<div>
 
-					</div>
-				}
+						</div>
+					}
 					{showBlockEditor === 1 && // Suggested
 						<div className='w-[300px] h-[88vh] border-[1px]'>
 							<div>
@@ -329,12 +414,23 @@ const Editor = () => {
 																fontSize: `${16 * nameSize}px`,
 																letterSpacing: `${10 * nameSpacing}px`,
 																textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																fontFamily: `${selectParameters.name_font_types}`
 															}}
 														>
 															{companyName.length === 0 ? 'Your Company Name' : companyName}
 														</div>
 														<IconComponent size={40} />
-														<div>{sloganName.length === 0 ? 'Your Slogan' : sloganName}</div>
+														<div
+															style={{
+																color: `${selectParameters.slogan_text_color}`,
+																fontSize: `${16 * sloganSize}px`,
+																letterSpacing: `${10 * sloganSpacing}px`,
+																textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																fontFamily: `${selectParameters.slogan_font_types}`,
+															}}
+														>
+															{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+														</div>
 													</div>
 												)
 											})}
@@ -374,16 +470,17 @@ const Editor = () => {
 									<div className='flex justify-start py-2 mx-5'>
 										<div>
 											{nameButtonSelected === 'Font Types' &&
-												<div className='flex items-center py-2 px-4 border-black border-2 rounded-3xl text-sm relative cursor-pointer'>
-													<p onClick={() => setShowFontTypesName(!showFontTypesName)} >
+												<div ref={fontTypesSliderRef} className='flex items-center py-2 px-4 border-black border-2 rounded-3xl text-sm relative cursor-pointer'>
+													<p onClick={() => setShowFontTypes(!showFontTypes)} >
 														Suggested (40 Results)
 													</p>
 													<MdKeyboardArrowDown />
-													{showFontTypesName ?
-														<div className='absolute top-12 left-[-24px] w-[300px] flex flex-wrap justify-center border-2 gap-x-2 gap-y-[1px] rounded-2xl shadow-2xl py-[2px]'>
+													{showFontTypes ?
+														<div className='absolute top-12 left-[-24px] bg-white w-[300px] flex flex-wrap justify-center border-2 gap-x-2 gap-y-[1px] rounded-2xl shadow-2xl py-[2px]'>
 															{FontImageList.map((el) => {
 																return (
 																	<div
+																		onClick={() => setNameFontTypesSelected(el.name)}
 																		className='w-[140px] h-[30px] px-4 flex items-center hover:bg-gray-100 rounded-xl'
 																		key={el.id}
 																	>
@@ -434,10 +531,21 @@ const Editor = () => {
 																				fontSize: `${16 * nameSize}px`,
 																				letterSpacing: `${10 * nameSpacing}px`,
 																				textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																				fontFamily: `${selectParameters.name_font_types}`,
 																			}}
 																		>{companyName.length === 0 ? 'Your Company Name' : companyName}</div>
 																		<IconComponent size={40} />
-																		<div>{sloganName.length === 0 ? 'Your Slogan' : sloganName}</div>
+																		<div
+																			style={{
+																				color: `${selectParameters.slogan_text_color}`,
+																				fontSize: `${16 * sloganSize}px`,
+																				letterSpacing: `${10 * sloganSpacing}px`,
+																				textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																				fontFamily: `${selectParameters.slogan_font_types}`,
+																			}}
+																		>
+																			{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+																		</div>
 																	</div>
 																)
 															})}
@@ -456,7 +564,209 @@ const Editor = () => {
 									<ChromePicker
 										width='270px'
 										color={selectParameters.name_text_color}
-										onChangeComplete={textColorHandleChange}
+										onChangeComplete={nameColorHandleChange}
+										disableAlpha={true}
+									/>
+								</div>
+							}
+							<div className='flex flex-col items-center'>
+								{FontTypesList[nameFontTypesSelected]?.map((el) => {
+									return (
+										<div
+											onClick={() => editNameFontType(el)}
+											className='mb-4 border-2 w-[240px] h-[160px] rounded-xl flex justify-center items-center gap-2 cursor-pointer'
+											key={el}
+											style={{
+												background: `${selectParameters.background}`,
+												flexDirection: `${selectParameters.direction}`
+											}}
+										>
+											<div
+												className='text-center'
+												style={{
+													color: `${selectParameters.name_text_color}`,
+													fontSize: `${16 * nameSize}px`,
+													letterSpacing: `${10 * nameSpacing}px`,
+													textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+													fontFamily: `${el}`
+												}}
+											>
+												{companyName.length === 0 ? 'Your Company Name' : companyName}
+											</div>
+											<IconComponent size={40} />
+											<div
+												style={{
+													color: `${selectParameters.slogan_text_color}`,
+													fontSize: `${16 * sloganSize}px`,
+													letterSpacing: `${10 * sloganSpacing}px`,
+													textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+													fontFamily: `${selectParameters.slogan_font_types}`,
+												}}
+											>
+												{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+											</div>
+										</div>
+									)
+								})}
+							</div>
+						</div>
+					}
+					{showBlockEditor === 7 && // Slogan
+						<div className='w-[300px] h-[88vh] border-[1px] overflow-auto'>
+							{visiblePicker ?
+								<>
+									<div>
+										<div className='flex items-center justify-between py-2 mx-3'>
+											<p className='font-bold '>Slogan Options</p>
+											<button className='flex justify-center items-center bg-gray-200 rounded-xl py-1 px-3 gap-x-1 hover:bg-gray-300'>
+												<MdOutlineOpenInFull color='blue' size={12} />
+												<p className='text-[10px] text-[blue] '>Fullscreen</p>
+											</button>
+										</div>
+										<EditorOptionsButton
+											names={["Font Types", "Colors", "Recent"]}
+											onSelect={setSloganButtonSelected}
+											selected={sloganButtonSelected}
+										/>
+									</div>
+									<div className='flex justify-start py-2 mx-5'>
+										<div>
+											{sloganButtonSelected === 'Font Types' &&
+												<><div ref={fontTypesSliderRef} className='flex items-center py-2 px-4 border-black border-2 rounded-3xl text-sm relative cursor-pointer'>
+													<p onClick={() => setShowFontTypes(!showFontTypes)} >
+														Suggested (40 Results)
+													</p>
+													<MdKeyboardArrowDown />
+													{showFontTypes ?
+														<div className='absolute top-12 left-[-24px] bg-white w-[300px] flex flex-wrap justify-center border-2 gap-x-2 gap-y-[1px] rounded-2xl shadow-2xl py-[2px]'>
+															{FontImageList.map((el) => {
+																return (
+																	<div
+																		onClick={() => setSloganFontTypesSelected(el.name)}
+																		className='w-[140px] h-[30px] px-4 flex items-center hover:bg-gray-100 rounded-xl'
+																		key={el.id}
+																	>
+																		<img src={el.img} alt="" />
+																	</div>
+																)
+															})}
+														</div>
+														: null
+													}
+												</div>
+													<div className='flex flex-col items-center pt-4'>
+														{FontTypesList[sloganFontTypesSelected]?.map((el) => {
+															return (
+																<div
+																	onClick={() => editSloganFontType(el)}
+																	className='mb-4 border-2 w-[240px] h-[160px] rounded-xl flex justify-center items-center gap-2 cursor-pointer'
+																	key={el}
+																	style={{
+																		background: `${selectParameters.background}`,
+																		flexDirection: `${selectParameters.direction}`
+																	}}
+																>
+																	<div
+																		className='text-center'
+																		style={{
+																			color: `${selectParameters.name_text_color}`,
+																			fontSize: `${16 * nameSize}px`,
+																			letterSpacing: `${10 * nameSpacing}px`,
+																			textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																			fontFamily: `${selectParameters.name_font_types}`
+																		}}
+																	>
+																		{companyName.length === 0 ? 'Your Company Name' : companyName}
+																	</div>
+																	<IconComponent size={40} />
+																	<div
+																		style={{
+																			color: `${selectParameters.slogan_text_color}`,
+																			fontSize: `${16 * sloganSize}px`,
+																			letterSpacing: `${10 * sloganSpacing}px`,
+																			textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																			fontFamily: `${el}`,
+																		}}
+																	>
+																		{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+																	</div>
+																</div>
+															)
+														})}
+													</div>
+												</>
+											}
+										</div>
+										<div>
+											{sloganButtonSelected === 'Colors' &&
+												<>
+													<div className='flex items-center justify-center gap-x-1 py-2'>
+														{ColorList.map((el) => {
+															return (
+																<div
+																	onClick={() => setSloganColor(el.name)}
+																	key={el.id}
+																	className='w-[25px] h-[25px] rounded-2xl flex justify-center items-center cursor-pointer'
+																	style={{ background: `${el.color}` }}
+																>
+																	<div className='hover:border-white hover:border-[2px] w-[23px] h-[23px] rounded-2xl '></div>
+																</div>
+															)
+														})}
+													</div>
+													<div>
+														{
+															ColorsShade[sloganColor]?.map((el) => {
+																return (
+																	<div
+																		onClick={() => editSloganColor(el)}
+																		className='mb-4 border-2 w-[240px] h-[160px] rounded-xl flex justify-center items-center gap-1 cursor-pointer'
+																		key={el}
+																		style={{
+																			flexDirection: `${selectParameters.direction}`,
+																			background: `${selectParameters.background}`
+																		}}
+																	>
+																		<div
+																			className='text-center'
+																			style={{
+																				color: `${selectParameters.name_text_color}`,
+																				fontSize: `${16 * nameSize}px`,
+																				letterSpacing: `${10 * nameSpacing}px`,
+																				textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																			}}
+																		>{companyName.length === 0 ? 'Your Company Name' : companyName}</div>
+																		<IconComponent size={40} />
+																		<div
+																			style={{
+																				color: `${el}`,
+																				fontSize: `${16 * sloganSize}px`,
+																				letterSpacing: `${10 * sloganSpacing}px`,
+																				textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																				fontFamily: `${selectParameters.slogan_font_types}`,
+																			}}
+																		>
+																			{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+																		</div>
+																	</div>
+																)
+															})}
+													</div>
+												</>
+											}
+
+										</div>
+									</div>
+									<div>
+
+									</div>
+								</>
+								:
+								<div className='flex justify-center'>
+									<ChromePicker
+										width='270px'
+										color={selectParameters.slogan_text_color}
+										onChangeComplete={sloganColorHandleChange}
 										disableAlpha={true}
 									/>
 								</div>
@@ -464,40 +774,171 @@ const Editor = () => {
 
 						</div>
 					}
-					{showBlockEditor === 7 && // Slogan
-						<div className='w-[300px] h-[88vh] border-[1px]'>
-							<div>
-								<div className='flex items-center justify-between py-2 mx-3'>
-									<p className='font-bold '>Slogan Options</p>
-									<button className='flex justify-center items-center bg-gray-200 rounded-xl py-1 px-3 gap-x-1 hover:bg-gray-300'>
-										<MdOutlineOpenInFull color='blue' size={12} />
-										<p className='text-[10px] text-[blue] '>Fullscreen</p>
-									</button>
-								</div>
-								<EditorOptionsButton
-									names={["Font Types", "Colors", "Recent"]}
-									onSelect={setSloganButtonSelected}
-									selected={sloganButtonSelected}
-								/>
-							</div>
-						</div>
-					}
 					{showBlockEditor === 8 && // Symbol
-						<div className='w-[300px] h-[88vh] border-[1px]'>
-							<div>
-								<div className='flex items-center justify-between py-2 mx-3'>
-									<p className='font-bold '>Symbol Options</p>
-									<button className='flex justify-center items-center bg-gray-200 rounded-xl py-1 px-3 gap-x-1 hover:bg-gray-300'>
-										<MdOutlineOpenInFull color='blue' size={12} />
-										<p className='text-[10px] text-[blue] '>Fullscreen</p>
-									</button>
+						<div className='w-[300px] h-[88vh] border-[1px] overflow-auto'>
+							{visiblePicker ?
+								<>
+									<div>
+										<div className='flex items-center justify-between py-2 mx-3'>
+											<p className='font-bold '>Symbol Options</p>
+											<button className='flex justify-center items-center bg-gray-200 rounded-xl py-1 px-3 gap-x-1 hover:bg-gray-300'>
+												<MdOutlineOpenInFull color='blue' size={12} />
+												<p className='text-[10px] text-[blue] '>Fullscreen</p>
+											</button>
+										</div>
+										<EditorOptionsButton
+											names={["Symbols", "Monogram", "Colors", "Recent"]}
+											onSelect={setSymbolButtonSelected}
+											selected={symbolButtonSelected}
+										/>
+									</div>
+									<div className='flex justify-start py-2 mx-5'>
+										<div className='pt-2'>
+											{symbolButtonSelected === "Symbols" &&
+												<>
+													<div className='relative pb-4'>
+														<input
+															className='w-[260px] border-[1px] focus:border-[1px] h-[36px] rounded-xl bg-gray-200 border-transparent hover:border-blue-600'
+															type="text"
+														/>
+														<button className=' h-[28px] w-[50px] text-blue-600 bg-white rounded-xl text-sm absolute top-1 right-1 flex items-center justify-center'><FaSearch size={16} /></button>
+													</div>
+													{iconArray.map((el) => {
+														const Icon = allIcons[el]
+														return (
+															<div
+																onClick={() => editIcon(el)}
+																className='mb-4 border-2 w-[240px] h-[160px] rounded-xl flex justify-center items-center gap-1 cursor-pointer '
+																key={el}
+																style={{
+																	flexDirection: `${selectParameters.direction}`,
+																	background: `${selectParameters.background}`
+																}}
+															>
+																<div
+																	className='text-center'
+																	style={{
+																		color: `${selectParameters.name_text_color}`,
+																		fontSize: `${16 * nameSize}px`,
+																		letterSpacing: `${10 * nameSpacing}px`,
+																		textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																	}}
+																>{companyName.length === 0 ? 'Your Company Name' : companyName}</div>
+																<Icon size={40} />
+																<div
+																	style={{
+																		color: `${selectParameters.slogan_text_color}`,
+																		fontSize: `${16 * sloganSize}px`,
+																		letterSpacing: `${10 * sloganSpacing}px`,
+																		textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																		fontFamily: `${selectParameters.slogan_font_types}`,
+																	}}
+																>
+																	{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+																</div>
+															</div>
+														)
+													})}
+												</>
+											}
+										</div>
+										<div className='pt-2'>
+											{symbolButtonSelected === "Monogram" &&
+												<div ref={fontTypesSliderRef} className='flex items-center py-2 px-4 border-black border-2 rounded-3xl text-sm relative cursor-pointer'>
+													<p onClick={() => setShowFontTypes(!showFontTypes)} >
+														Suggested (40 Results)
+													</p>
+													<MdKeyboardArrowDown />
+													{showFontTypes ?
+														<div className='absolute top-12 left-[-24px] bg-white w-[300px] flex flex-wrap justify-center border-2 gap-x-2 gap-y-[1px] rounded-2xl shadow-2xl py-[2px]'>
+															{FontImageList.map((el) => {
+																return (
+																	<div
+																		// onClick={() => setSloganFontTypesSelected(el.name)}
+																		className='w-[140px] h-[30px] px-4 flex items-center hover:bg-gray-100 rounded-xl'
+																		key={el.id}
+																	>
+																		<img src={el.img} alt="" />
+																	</div>
+																)
+															})}
+														</div>
+														: null
+													}
+												</div>
+											}
+										</div>
+										<div>
+											{symbolButtonSelected === "Colors" &&
+												<>
+													<div className='flex items-center justify-center gap-x-1 py-2'>
+														{ColorList.map((el) => {
+															return (
+																<div
+																	onClick={() => setSymbolColor(el.name)}
+																	key={el.id}
+																	className='w-[25px] h-[25px] rounded-2xl flex justify-center items-center cursor-pointer'
+																	style={{ background: `${el.color}` }}
+																>
+																	<div className='hover:border-white hover:border-[2px] w-[23px] h-[23px] rounded-2xl '></div>
+																</div>
+															)
+														})}
+													</div>
+													<div>
+														{
+															ColorsShade[symbolColor]?.map((el) => {
+																return (
+																	<div
+																		onClick={() => editIconColor(el)}
+																		className='mb-4 border-2 w-[240px] h-[160px] rounded-xl flex justify-center items-center gap-1 cursor-pointer'
+																		key={el}
+																		style={{
+																			flexDirection: `${selectParameters.direction}`,
+																			background: `${selectParameters.background}`
+																		}}
+																	>
+																		<div
+																			className='text-center'
+																			style={{
+																				color: `${selectParameters.name_text_color}`,
+																				fontSize: `${16 * nameSize}px`,
+																				letterSpacing: `${10 * nameSpacing}px`,
+																				textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																				fontFamily: `${selectParameters.name_font_types}`
+																			}}
+																		>{companyName.length === 0 ? 'Your Company Name' : companyName}</div>
+																		<IconComponent color={el} size={40} />
+																		<div
+																			style={{
+																				color: `${selectParameters.slogan_text_color}`,
+																				fontSize: `${16 * sloganSize}px`,
+																				letterSpacing: `${10 * sloganSpacing}px`,
+																				textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																				fontFamily: `${selectParameters.slogan_font_types}`,
+																			}}
+																		>
+																			{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+																		</div>
+																	</div>
+																)
+															})}
+													</div>
+												</>
+											}
+										</div>
+									</div>
+								</>
+								:
+								<div className='flex justify-center'>
+									<ChromePicker
+										width='270px'
+										color={selectParameters.symbol_color}
+										onChangeComplete={symbolColorHandleChange}
+										disableAlpha={true}
+									/>
 								</div>
-								<EditorOptionsButton
-									names={["Symbols", "Monogram", "Colors", "Recent"]}
-									onSelect={setSymbolButtonSelected}
-									selected={symbolButtonSelected}
-								/>
-							</div>
+							}
 						</div>
 					}
 					{showBlockEditor === 9 && // Container
@@ -544,11 +985,11 @@ const Editor = () => {
 								<button className='h-[28px] w-[50px] text-blue-600 bg-white rounded-2xl text-sm absolute top-1 right-1'>Stack</button>
 							</div>
 							<button  //FontSize
-								onBlur={() => setShowSizeNameSlider(false)}
+								ref={fontSizeSliderRef}
 								className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl cursor-pointer text-sm relative'
 							>
-								<p onClick={() => setShowSizeNameSlider(!showSizeNameSlider)}>Size</p>
-								{showSizeNameSlider ?
+								<p onClick={() => setShowSizeSlider(!showSizeSlider)}>Size</p>
+								{showSizeSlider ?
 									<div className='absolute top-10 w-[160px] border-[1px] py-2 px-4 shadow-2xl rounded-xl flex flex-col items-start'>
 										<p>Size: {nameSize}</p>
 										<RangeSlider
@@ -556,14 +997,14 @@ const Editor = () => {
 											min={0.05}
 											max={2.25}
 											step={0.05}
-											onChange={handleSize}
+											onChange={handleNameSize}
 										/>
 									</div>
 									: null
 								}
 							</button>
 							<button  //LetterSpacing
-								onBlur={() => setShowSpacingSlider(false)}
+								ref={spacingSliderRef}
 								className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl cursor-pointer'
 							>
 								<CgFontSpacing size={20} onClick={() => setShowSpacingSlider(!showSpacingSlider)} />
@@ -575,7 +1016,7 @@ const Editor = () => {
 											min={-0.50}
 											max={2}
 											step={0.05}
-											onChange={handleSpacing}
+											onChange={handleNameSpacing}
 										/>
 									</div>
 									: null
@@ -589,6 +1030,114 @@ const Editor = () => {
 									selected={nameLowercaseButton}
 								/>
 							</button>
+							<div className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl cursor-pointer' ><RiDeleteBinLine size={20} color='gray' /></div>
+						</div>
+					}
+					{showBlockEditor === 7 && // Slogan
+						<div className='flex items-center gap-x-1 absolute top-5 left-5'>
+							<div
+								onClick={() => setVisiblePicker(!visiblePicker)}
+								className='w-[30px] h-[30px] cursor-pointer rounded-xl '
+								style={{ background: `${selectParameters.slogan_text_color}` }}
+							>
+
+							</div>
+							<div className='relative'>
+								<input
+									value={sloganName}
+									onChange={sloganNameHandleChange}
+									className='border-[1px] focus:border-[1px] h-[36px] rounded-2xl bg-gray-100 border-blue-600'
+									type="text"
+								/>
+								<button className='h-[28px] w-[50px] text-blue-600 bg-white rounded-2xl text-sm absolute top-1 right-1'>Stack</button>
+							</div>
+							<button  //FontSize
+								ref={fontSizeSliderRef}
+								className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl cursor-pointer text-sm relative'
+							>
+								<p onClick={() => setShowSizeSlider(!showSizeSlider)}>Size</p>
+								{showSizeSlider ?
+									<div className='absolute top-10 w-[160px] border-[1px] py-2 px-4 shadow-2xl rounded-xl flex flex-col items-start'>
+										<p>Size: {sloganSize}</p>
+										<RangeSlider
+											value={sloganSize}
+											min={0.05}
+											max={2.25}
+											step={0.05}
+											onChange={handleSloganSize}
+										/>
+									</div>
+									: null
+								}
+							</button>
+							<button  //LetterSpacing
+								ref={spacingSliderRef}
+								className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl cursor-pointer'
+							>
+								<CgFontSpacing size={20} onClick={() => setShowSpacingSlider(!showSpacingSlider)} />
+								{showSpacingSlider ?
+									<div className='absolute top-10 w-[160px] border-[1px] py-2 px-4 shadow-2xl rounded-xl flex flex-col items-start'>
+										<p>Size: {sloganSpacing}</p>
+										<RangeSlider
+											value={sloganSpacing}
+											min={-0.50}
+											max={2}
+											step={0.05}
+											onChange={handleSloganSpacing}
+										/>
+									</div>
+									: null
+								}
+							</button>
+							<button //LowerCase 
+							>
+								<EditorLowercaseButton
+									names={["ABC", "abc"]}
+									onSelect={setSloganLowercaseButton}
+									selected={sloganLowercaseButton}
+								/>
+							</button>
+							<div className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl cursor-pointer' ><RiDeleteBinLine size={20} color='gray' /></div>
+						</div>
+					}
+					{showBlockEditor === 8 && // Symbol
+						<div className='flex items-center gap-x-1 absolute top-5 left-5'>
+							<div
+								onClick={() => setVisiblePicker(!visiblePicker)}
+								className='w-[30px] h-[30px] cursor-pointer rounded-xl '
+								style={{ background: `${'green'}` }}
+							>
+
+							</div>
+							<button
+								className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl'
+							>
+								<p>Size</p>
+							</button>
+							<button
+								className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl'
+							>
+								<p>Position</p>
+							</button>
+							<EditorInternalPositionButton
+								iconNames={[
+									<LuUnfoldHorizontal color={selectedHorizontal ? 'blue' : 'black'} size={16} />,
+									<LuUnfoldVertical size={16} color={selectedVertical ? 'blue' : 'black'} />]}
+								onSelect={selectPositionIndex}
+								selected={selectPositionIndex}
+								selectedHorizontal={selectedHorizontal}
+								selectedVertical={selectedVertical}
+							/>
+							<EditorExternalPositionButton
+								iconNames={[
+									{ icon: <PiAlignBottomSimpleBold size={16} color={symbolSelectedExternalPosition === 'bottom' ? 'blue' : 'black'} />, value: "bottom" },
+									{ icon: <PiAlignLeftSimpleBold size={16} color={symbolSelectedExternalPosition === 'left' ? 'blue' : 'black'} />, value: "left" },
+									{ icon: <PiAlignRightSimpleBold size={16} color={symbolSelectedExternalPosition === 'right' ? 'blue' : 'black'} />, value: "right" },
+									{ icon: <PiAlignTopSimpleBold size={16} color={symbolSelectedExternalPosition === 'top' ? 'blue' : 'black'} />, value: "top" },
+								]}
+								onSelect={setSymbolSelectedExternalPosition}
+								selected={symbolSelectedExternalPosition}
+							/>
 							<div className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl cursor-pointer' ><RiDeleteBinLine size={20} color='gray' /></div>
 						</div>
 					}
@@ -606,16 +1155,26 @@ const Editor = () => {
 								fontSize: `${32 * nameSize}px`,
 								letterSpacing: `${20 * nameSpacing}px`,
 								textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-								// fontFamily: `${'Texturina'}`
+								fontFamily: `${selectParameters.name_font_types}`
 							}}
 						>
 							{companyName.length === 0 ? 'Your Company Name' : companyName}
 						</div>
-						{IconComponent && <IconComponent size={40} />}
-						<div>{sloganName.length === 0 ? 'Your Slogan' : sloganName}</div>
+						{IconComponent && <IconComponent color={selectParameters.symbol_color} size={90} />}
+						<div
+							style={{
+								color: `${selectParameters.slogan_text_color}`,
+								fontSize: `${32 * sloganSize}px`,
+								letterSpacing: `${20 * sloganSpacing}px`,
+								textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+								fontFamily: `${selectParameters.slogan_font_types}`
+							}}
+						>
+							{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+						</div>
 					</div>
 				</div>
-			</div>
+			</div >
 
 		</div >
 	)

@@ -34,9 +34,14 @@ const Explore = () => {
 			setLikedColor([...likedColor, name])
 		}
 	}
-	const editTransition = (background, direction, nameIcon, name_text_color) => {
-		setSelectParameters({ background, direction, nameIcon })
-		localStorage.setItem('selectedTemplate', JSON.stringify({ background, direction, nameIcon, name_text_color }))
+	const editTransition = (background, direction, nameIcon, name_text_color, name_font_types, slogan_font_types, slogan_text_color, symbol_color) => {
+		setSelectParameters({ background, direction, nameIcon, name_text_color, name_font_types, slogan_font_types, slogan_text_color, symbol_color })
+		localStorage.setItem('selectedTemplate', JSON.stringify({
+			background, direction,
+			nameIcon, name_text_color,
+			name_font_types, slogan_font_types,
+			slogan_text_color, symbol_color
+		}))
 		navigate('/editor')
 	}
 	return (
@@ -102,7 +107,7 @@ const Explore = () => {
 					const IconComponent = allIcons[name]
 					return (
 						<div
-							onClick={() => editTransition(template.background_color, template.flex_direction, name, template.name_text_color)}
+							onClick={() => editTransition(template.background_color, template.flex_direction, name, template.name_text_color, template.name_font_types, template.slogan_font_types, template.slogan_text_color)}
 							key={template.id}
 							className='border-2 w-[240px] h-[180px] rounded-xl flex justify-center items-center gap-2'
 							style={{
@@ -112,12 +117,22 @@ const Explore = () => {
 						>
 							<p
 								className='italic font-[cursive] uppercase text-[16px]'
-								style={{ color: `${template.name_text_color}`, }}
+								style={{
+									color: `${template.name_text_color}`,
+									fontFamily: `${template.name_font_types}`
+								}}
 							>
 								{companyName}
 							</p>
-							<IconComponent size={50} />
-							<p>{sloganName}</p>
+							<IconComponent color={template.symbol_color} size={50} />
+							<p
+								style={{
+									color: `${template.slogan_text_color}`,
+									fontFamily: `${template.slogan_font_types}`
+								}}
+							>
+								{sloganName}
+							</p>
 						</div>
 					)
 				})}

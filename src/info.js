@@ -262,18 +262,30 @@ export const EditInformation = [
 		background_color: 'blue', //blue
 		flex_direction: 'column',
 		name_text_color: 'orange',
+		name_font_types: 'serif',
+		slogan_text_color: 'green',
+		slogan_font_types: 'monospace',
+		symbol_color: 'red',
 		id: 1,
 	},
 	{
-		name_text_color: 'black',
 		background_color: 'green', //green
 		flex_direction: 'column-reverse',
+		name_text_color: 'black',
+		name_font_types: 'monospace',
+		slogan_text_color: 'blue',
+		slogan_font_types: 'sans-serif',
+		symbol_color: 'red',
 		id: 2,
 	},
 	{
-		name_text_color: 'blue',
 		background_color: 'red', // red-500
 		flex_direction: 'row-reverse',
+		name_text_color: 'blue',
+		name_font_types: 'sans-serif',
+		slogan_text_color: 'orange',
+		slogan_font_types: 'serif',
+		symbol_color: 'green',
 		id: 3,
 	},
 ]
@@ -290,40 +302,48 @@ export const ColorsShade = {
 }
 export const FontImageList = [
 	{
+		name: 'serif',
 		img: serif,
 		id: 1,
 	},
 	{
+		name: 'sans-serif',
 		img: sans_serif,
 		id: 2,
 	},
 	{
+		name: 'monospace',
 		img: slab,
 		id: 3,
 	},
 	{
+		name: 'bubbly',
 		img: bubbly,
 		id: 4,
 	},
 	{
+		name: 'modern',
 		img: modern,
 		id: 5,
 	},
 	{
+		name: 'funky',
 		img: funky,
 		id: 6,
 	},
 	{
+		name: 'suggesting',
 		img: suggesting,
 		id: 7,
 	},
 	{
+		name: 'skript',
 		img: skript,
 		id: 8,
 	},
 ]
 export const FontTypesList = {
-	serif: ['Noto Serif', 'Grenze', 'Noto Serif Display', 'Noto Serif Tamil', 'Roboto Serif', 'Texturina',],
-	slab: ['Rokkitt', 'Aleo'],
-	sans_serif: ['Montserrat', 'Roboto Condensed', 'Nunito', 'Kanit', 'Barlow', 'Jost',]
+	'serif': ['Noto Serif', 'Grenze', 'Noto Serif Display', 'Noto Serif Tamil', 'Roboto Serif', 'Texturina',],
+	'monospace': ['Rokkitt', 'Aleo'],
+	'sans-serif': ['Montserrat', 'Roboto Condensed', 'Nunito', 'Kanit', 'Barlow', 'Jost',]
 }
