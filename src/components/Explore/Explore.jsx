@@ -34,6 +34,12 @@ const Explore = () => {
 			setLikedColor([...likedColor, name])
 		}
 	}
+	const companyNameHandleChange = (e) => {
+		setCompanyName(e.target.value)
+	}
+	const sloganNameHandleChange = (e) => {
+		setSloganName(e.target.value)
+	}
 	const editTransition = (background, direction, nameIcon, name_text_color, name_font_types, slogan_font_types, slogan_text_color, symbol_color) => {
 		setSelectParameters({ background, direction, nameIcon, name_text_color, name_font_types, slogan_font_types, slogan_text_color, symbol_color })
 		localStorage.setItem('selectedTemplate', JSON.stringify({
@@ -52,12 +58,14 @@ const Explore = () => {
 					type="text"
 					placeholder='Company Name'
 					defaultValue={companyName}
+					onChange={companyNameHandleChange}
 				/>
 				<input
 					className='h-[35px] w-[180px] rounded-xl border-slate-300'
 					type="text"
 					placeholder='Slogan'
 					defaultValue={sloganName}
+					onChange={sloganNameHandleChange}
 				/>
 				<button onBlur={() => setShowColors(false)} className='relative h-[35px] w-[60px] border-[1px] border-slate-300 rounded-xl flex items-center justify-center'>
 					<div onClick={() => setShowColors(!showColors)} className='flex items-center gap-1'>
@@ -115,24 +123,27 @@ const Explore = () => {
 								flexDirection: `${template.flex_direction}`
 							}}
 						>
-							<p
-								className='italic font-[cursive] uppercase text-[16px]'
-								style={{
-									color: `${template.name_text_color}`,
-									fontFamily: `${template.name_font_types}`
-								}}
-							>
-								{companyName}
-							</p>
+
+							<div>
+								<p
+									className='italic font-[cursive] uppercase text-[16px]'
+									style={{
+										color: `${template.name_text_color}`,
+										fontFamily: `${template.name_font_types}`
+									}}
+								>
+									{companyName}
+								</p>
+								<p
+									style={{
+										color: `${template.slogan_text_color}`,
+										fontFamily: `${template.slogan_font_types}`
+									}}
+								>
+									{sloganName}
+								</p>
+							</div>
 							<IconComponent color={template.symbol_color} size={50} />
-							<p
-								style={{
-									color: `${template.slogan_text_color}`,
-									fontFamily: `${template.slogan_font_types}`
-								}}
-							>
-								{sloganName}
-							</p>
 						</div>
 					)
 				})}

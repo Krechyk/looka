@@ -25,7 +25,7 @@ import {
 	FaDungeon, FaFortAwesomeAlt
 } from "react-icons/fa";
 import { DiSmashingMagazine } from "react-icons/di";
-import { TiThMenu } from "react-icons/ti";
+import { TiThMenu, TiArrowRepeat } from "react-icons/ti";
 import { GiStarKey } from "react-icons/gi";
 import { MdKeyboardArrowDown, MdOutlineOpenInFull } from "react-icons/md";
 import { BiDroplet, BiSolidEditAlt } from "react-icons/bi";
@@ -45,6 +45,7 @@ const Editor = () => {
 	const [showSpacingSlider, setShowSpacingSlider] = useState(false)
 	const [visiblePicker, setVisiblePicker] = useState(true)
 	const [showFontTypes, setShowFontTypes] = useState(false)
+	const [showPositionSlider, setShowPositionSlider] = useState(false)
 
 	const [ideasButtonSelected, setIdeasButtonSelected] = useState("Font Pairs")
 	const [backgroundColorsSelected, setBackgroundColorsSelected] = useState('Green')
@@ -64,16 +65,19 @@ const Editor = () => {
 	const [sloganSpacing, setSloganSpacing] = useState(0.1)
 
 	const [symbolButtonSelected, setSymbolButtonSelected] = useState("Symbols")
-	const [symbolSelectedInternalPosition, setSymbolSelectedInternalPosition] = useState(0)
+	const [symbolSelectedInternalPosition, setSymbolSelectedInternalPosition] = useState(0) //--
 	const [symbolSelectedExternalPosition, setSymbolSelectedExternalPosition] = useState()
 	const [selectedVertical, setSelectedVertical] = useState(false)
 	const [selectedHorizontal, setSelectedHorizontal] = useState(false)
-	const [symbolColor, setSymbolColor] = useState('black')
-
+	const [symbolColor, setSymbolColor] = useState('Green')
+	const [symbolSize, setSymbolSize] = useState(1)
+	const [symbolVerticalPositionSlider, setSymbolVerticalPositionSlider] = useState(0)
+	const [symbolHorizontalPositionSlider, setSymbolHorizontalPositionSlider] = useState(0)
 
 	const fontSizeSliderRef = useRef(null)
 	const spacingSliderRef = useRef(null)
 	const fontTypesSliderRef = useRef(null)
+	const positionSliderRef = useRef(null)
 
 	const {
 		companyName, setCompanyName,
@@ -116,7 +120,7 @@ const Editor = () => {
 	const editIcon = (el) => {
 		setSelectParameters({ ...selectParameters, nameIcon: el })
 	}
-	const editIconColor = (el) => {
+	const editSymbolColor = (el) => {
 		setSelectParameters({ ...selectParameters, symbol_color: el })
 	}
 	const symbolColorHandleChange = (color) => {
@@ -140,6 +144,9 @@ const Editor = () => {
 	const handleSloganSpacing = (e) => {
 		setSloganSpacing(e.target.value)
 	}
+	const handleSymbolSize = (e) => {
+		setSymbolSize(e.target.value)
+	}
 	const selectPositionIndex = (index) => {
 		setSymbolSelectedInternalPosition(index)
 		if (index === 0) {
@@ -148,8 +155,25 @@ const Editor = () => {
 			setSelectedVertical(!selectedVertical)
 		}
 	}
-	console.log(iconArray)
+	const handleSymbolHorizontalPosition = (e) => {
+		setSymbolHorizontalPositionSlider(e.target.value)
+	}
+	const handleSymbolVerticalPosition = (e) => {
+		setSymbolVerticalPositionSlider(e.target.value)
+	}
+	const editDirection = (position) => {
+		if (position === 'left') {
+			setSelectParameters({ ...selectParameters, direction: 'row' })
+		} else if (position === 'right') {
+			setSelectParameters({ ...selectParameters, direction: 'row-reverse' })
+		} else if (position === 'top') {
+			setSelectParameters({ ...selectParameters, direction: 'column' })
+		} else {
+			setSelectParameters({ ...selectParameters, direction: 'column-reverse' })
+		}
 
+	}
+	console.log(selectParameters.direction)
 	useEffect(() => {
 		const tempTemplate = localStorage.getItem('selectedTemplate')
 		if (tempTemplate) {
@@ -166,6 +190,9 @@ const Editor = () => {
 			}
 			if (fontTypesSliderRef.current && !fontTypesSliderRef.current.contains(event.target)) {
 				setShowFontTypes(false);
+			}
+			if (positionSliderRef.current && !positionSliderRef.current.contains(event.target)) {
+				setShowPositionSlider(false);
 			}
 		};
 		document.addEventListener('mousedown', handleClickOutsideToolbar);
@@ -407,30 +434,33 @@ const Editor = () => {
 															flexDirection: `${selectParameters.direction}`
 														}}
 													>
-														<div
-															className='text-center'
-															style={{
-																color: `${selectParameters.name_text_color}`,
-																fontSize: `${16 * nameSize}px`,
-																letterSpacing: `${10 * nameSpacing}px`,
-																textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-																fontFamily: `${selectParameters.name_font_types}`
-															}}
-														>
-															{companyName.length === 0 ? 'Your Company Name' : companyName}
+														<div>
+															<p
+																className='text-center'
+																style={{
+																	color: `${selectParameters.name_text_color}`,
+																	fontSize: `${16 * nameSize}px`,
+																	letterSpacing: `${10 * nameSpacing}px`,
+																	textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																	fontFamily: `${selectParameters.name_font_types}`
+																}}
+															>
+																{companyName.length === 0 ? 'Your Company Name' : companyName}
+															</p>
+															<p
+																style={{
+																	color: `${selectParameters.slogan_text_color}`,
+																	fontSize: `${16 * sloganSize}px`,
+																	letterSpacing: `${10 * sloganSpacing}px`,
+																	textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																	fontFamily: `${selectParameters.slogan_font_types}`,
+																}}
+															>
+																{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+															</p>
 														</div>
 														<IconComponent size={40} />
-														<div
-															style={{
-																color: `${selectParameters.slogan_text_color}`,
-																fontSize: `${16 * sloganSize}px`,
-																letterSpacing: `${10 * sloganSpacing}px`,
-																textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-																fontFamily: `${selectParameters.slogan_font_types}`,
-															}}
-														>
-															{sloganName.length === 0 ? 'Your Slogan' : sloganName}
-														</div>
+
 													</div>
 												)
 											})}
@@ -524,28 +554,32 @@ const Editor = () => {
 																			background: `${selectParameters.background}`
 																		}}
 																	>
-																		<div
-																			className='text-center'
-																			style={{
-																				color: `${el}`,
-																				fontSize: `${16 * nameSize}px`,
-																				letterSpacing: `${10 * nameSpacing}px`,
-																				textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-																				fontFamily: `${selectParameters.name_font_types}`,
-																			}}
-																		>{companyName.length === 0 ? 'Your Company Name' : companyName}</div>
-																		<IconComponent size={40} />
-																		<div
-																			style={{
-																				color: `${selectParameters.slogan_text_color}`,
-																				fontSize: `${16 * sloganSize}px`,
-																				letterSpacing: `${10 * sloganSpacing}px`,
-																				textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-																				fontFamily: `${selectParameters.slogan_font_types}`,
-																			}}
-																		>
-																			{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+																		<div>
+																			<p
+																				className='text-center'
+																				style={{
+																					color: `${el}`,
+																					fontSize: `${16 * nameSize}px`,
+																					letterSpacing: `${10 * nameSpacing}px`,
+																					textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																					fontFamily: `${selectParameters.name_font_types}`,
+																				}}
+																			>
+																				{companyName.length === 0 ? 'Your Company Name' : companyName}
+																			</p>
+																			<p
+																				style={{
+																					color: `${selectParameters.slogan_text_color}`,
+																					fontSize: `${16 * sloganSize}px`,
+																					letterSpacing: `${10 * sloganSpacing}px`,
+																					textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																					fontFamily: `${selectParameters.slogan_font_types}`,
+																				}}
+																			>
+																				{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+																			</p>
 																		</div>
+																		<IconComponent size={40} />
 																	</div>
 																)
 															})}
@@ -581,30 +615,32 @@ const Editor = () => {
 												flexDirection: `${selectParameters.direction}`
 											}}
 										>
-											<div
-												className='text-center'
-												style={{
-													color: `${selectParameters.name_text_color}`,
-													fontSize: `${16 * nameSize}px`,
-													letterSpacing: `${10 * nameSpacing}px`,
-													textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-													fontFamily: `${el}`
-												}}
-											>
-												{companyName.length === 0 ? 'Your Company Name' : companyName}
+											<div>
+												<p
+													className='text-center'
+													style={{
+														color: `${selectParameters.name_text_color}`,
+														fontSize: `${16 * nameSize}px`,
+														letterSpacing: `${10 * nameSpacing}px`,
+														textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+														fontFamily: `${el}`
+													}}
+												>
+													{companyName.length === 0 ? 'Your Company Name' : companyName}
+												</p>
+												<p
+													style={{
+														color: `${selectParameters.slogan_text_color}`,
+														fontSize: `${16 * sloganSize}px`,
+														letterSpacing: `${10 * sloganSpacing}px`,
+														textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+														fontFamily: `${selectParameters.slogan_font_types}`,
+													}}
+												>
+													{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+												</p>
 											</div>
 											<IconComponent size={40} />
-											<div
-												style={{
-													color: `${selectParameters.slogan_text_color}`,
-													fontSize: `${16 * sloganSize}px`,
-													letterSpacing: `${10 * sloganSpacing}px`,
-													textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-													fontFamily: `${selectParameters.slogan_font_types}`,
-												}}
-											>
-												{sloganName.length === 0 ? 'Your Slogan' : sloganName}
-											</div>
 										</div>
 									)
 								})}
@@ -666,30 +702,32 @@ const Editor = () => {
 																		flexDirection: `${selectParameters.direction}`
 																	}}
 																>
-																	<div
-																		className='text-center'
-																		style={{
-																			color: `${selectParameters.name_text_color}`,
-																			fontSize: `${16 * nameSize}px`,
-																			letterSpacing: `${10 * nameSpacing}px`,
-																			textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-																			fontFamily: `${selectParameters.name_font_types}`
-																		}}
-																	>
-																		{companyName.length === 0 ? 'Your Company Name' : companyName}
+																	<div>
+																		<p
+																			className='text-center'
+																			style={{
+																				color: `${selectParameters.name_text_color}`,
+																				fontSize: `${16 * nameSize}px`,
+																				letterSpacing: `${10 * nameSpacing}px`,
+																				textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																				fontFamily: `${selectParameters.name_font_types}`
+																			}}
+																		>
+																			{companyName.length === 0 ? 'Your Company Name' : companyName}
+																		</p>
+																		<p
+																			style={{
+																				color: `${selectParameters.slogan_text_color}`,
+																				fontSize: `${16 * sloganSize}px`,
+																				letterSpacing: `${10 * sloganSpacing}px`,
+																				textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																				fontFamily: `${el}`,
+																			}}
+																		>
+																			{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+																		</p>
 																	</div>
 																	<IconComponent size={40} />
-																	<div
-																		style={{
-																			color: `${selectParameters.slogan_text_color}`,
-																			fontSize: `${16 * sloganSize}px`,
-																			letterSpacing: `${10 * sloganSpacing}px`,
-																			textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-																			fontFamily: `${el}`,
-																		}}
-																	>
-																		{sloganName.length === 0 ? 'Your Slogan' : sloganName}
-																	</div>
 																</div>
 															)
 														})}
@@ -727,27 +765,30 @@ const Editor = () => {
 																			background: `${selectParameters.background}`
 																		}}
 																	>
-																		<div
-																			className='text-center'
-																			style={{
-																				color: `${selectParameters.name_text_color}`,
-																				fontSize: `${16 * nameSize}px`,
-																				letterSpacing: `${10 * nameSpacing}px`,
-																				textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-																			}}
-																		>{companyName.length === 0 ? 'Your Company Name' : companyName}</div>
-																		<IconComponent size={40} />
-																		<div
-																			style={{
-																				color: `${el}`,
-																				fontSize: `${16 * sloganSize}px`,
-																				letterSpacing: `${10 * sloganSpacing}px`,
-																				textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-																				fontFamily: `${selectParameters.slogan_font_types}`,
-																			}}
-																		>
-																			{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+																		<div>
+																			<p
+																				className='text-center'
+																				style={{
+																					color: `${selectParameters.name_text_color}`,
+																					fontSize: `${16 * nameSize}px`,
+																					letterSpacing: `${10 * nameSpacing}px`,
+																					textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																				}}
+																			>{companyName.length === 0 ? 'Your Company Name' : companyName}
+																			</p>
+																			<p
+																				style={{
+																					color: `${el}`,
+																					fontSize: `${16 * sloganSize}px`,
+																					letterSpacing: `${10 * sloganSpacing}px`,
+																					textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																					fontFamily: `${selectParameters.slogan_font_types}`,
+																				}}
+																			>
+																				{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+																			</p>
 																		</div>
+																		<IconComponent size={40} />
 																	</div>
 																)
 															})}
@@ -815,27 +856,31 @@ const Editor = () => {
 																	background: `${selectParameters.background}`
 																}}
 															>
-																<div
-																	className='text-center'
-																	style={{
-																		color: `${selectParameters.name_text_color}`,
-																		fontSize: `${16 * nameSize}px`,
-																		letterSpacing: `${10 * nameSpacing}px`,
-																		textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-																	}}
-																>{companyName.length === 0 ? 'Your Company Name' : companyName}</div>
-																<Icon size={40} />
-																<div
-																	style={{
-																		color: `${selectParameters.slogan_text_color}`,
-																		fontSize: `${16 * sloganSize}px`,
-																		letterSpacing: `${10 * sloganSpacing}px`,
-																		textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-																		fontFamily: `${selectParameters.slogan_font_types}`,
-																	}}
-																>
-																	{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+																<div>
+																	<p
+																		className='text-center'
+																		style={{
+																			color: `${selectParameters.name_text_color}`,
+																			fontSize: `${16 * nameSize}px`,
+																			letterSpacing: `${10 * nameSpacing}px`,
+																			textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																		}}
+																	>
+																		{companyName.length === 0 ? 'Your Company Name' : companyName}
+																	</p>
+																	<p
+																		style={{
+																			color: `${selectParameters.slogan_text_color}`,
+																			fontSize: `${16 * sloganSize}px`,
+																			letterSpacing: `${10 * sloganSpacing}px`,
+																			textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																			fontFamily: `${selectParameters.slogan_font_types}`,
+																		}}
+																	>
+																		{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+																	</p>
 																</div>
+																<Icon size={40} />
 															</div>
 														)
 													})}
@@ -890,7 +935,7 @@ const Editor = () => {
 															ColorsShade[symbolColor]?.map((el) => {
 																return (
 																	<div
-																		onClick={() => editIconColor(el)}
+																		onClick={() => editSymbolColor(el)}
 																		className='mb-4 border-2 w-[240px] h-[160px] rounded-xl flex justify-center items-center gap-1 cursor-pointer'
 																		key={el}
 																		style={{
@@ -898,28 +943,32 @@ const Editor = () => {
 																			background: `${selectParameters.background}`
 																		}}
 																	>
-																		<div
-																			className='text-center'
-																			style={{
-																				color: `${selectParameters.name_text_color}`,
-																				fontSize: `${16 * nameSize}px`,
-																				letterSpacing: `${10 * nameSpacing}px`,
-																				textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-																				fontFamily: `${selectParameters.name_font_types}`
-																			}}
-																		>{companyName.length === 0 ? 'Your Company Name' : companyName}</div>
-																		<IconComponent color={el} size={40} />
-																		<div
-																			style={{
-																				color: `${selectParameters.slogan_text_color}`,
-																				fontSize: `${16 * sloganSize}px`,
-																				letterSpacing: `${10 * sloganSpacing}px`,
-																				textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-																				fontFamily: `${selectParameters.slogan_font_types}`,
-																			}}
-																		>
-																			{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+																		<div>
+																			<p
+																				className='text-center'
+																				style={{
+																					color: `${selectParameters.name_text_color}`,
+																					fontSize: `${16 * nameSize}px`,
+																					letterSpacing: `${10 * nameSpacing}px`,
+																					textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																					fontFamily: `${selectParameters.name_font_types}`
+																				}}
+																			>
+																				{companyName.length === 0 ? 'Your Company Name' : companyName}
+																			</p>
+																			<p
+																				style={{
+																					color: `${selectParameters.slogan_text_color}`,
+																					fontSize: `${16 * sloganSize}px`,
+																					letterSpacing: `${10 * sloganSpacing}px`,
+																					textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+																					fontFamily: `${selectParameters.slogan_font_types}`,
+																				}}
+																			>
+																				{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+																			</p>
 																		</div>
+																		<IconComponent color={el} size={40} />
 																	</div>
 																)
 															})}
@@ -990,8 +1039,14 @@ const Editor = () => {
 							>
 								<p onClick={() => setShowSizeSlider(!showSizeSlider)}>Size</p>
 								{showSizeSlider ?
-									<div className='absolute top-10 w-[160px] border-[1px] py-2 px-4 shadow-2xl rounded-xl flex flex-col items-start'>
-										<p>Size: {nameSize}</p>
+									<div className='absolute top-10 w-[160px] border-[1px] py-2 px-4 shadow-2xl rounded-xl flex flex-col items-start bg-white'>
+										<div
+											className='absolute top-1 right-2'
+											onClick={() => setNameSize(1)}
+										>
+											<TiArrowRepeat />
+										</div>
+										<p className='text-xs'>Size: {nameSize}</p>
 										<RangeSlider
 											value={nameSize}
 											min={0.05}
@@ -1009,8 +1064,14 @@ const Editor = () => {
 							>
 								<CgFontSpacing size={20} onClick={() => setShowSpacingSlider(!showSpacingSlider)} />
 								{showSpacingSlider ?
-									<div className='absolute top-10 w-[160px] border-[1px] py-2 px-4 shadow-2xl rounded-xl flex flex-col items-start'>
-										<p>Size: {nameSpacing}</p>
+									<div className='absolute top-10 w-[160px] border-[1px] py-2 px-4 shadow-2xl rounded-xl flex flex-col items-start bg-white'>
+										<div
+											className='absolute top-1 right-2'
+											onClick={() => setNameSpacing(0.2)}
+										>
+											<TiArrowRepeat />
+										</div>
+										<p className='text-xs'>Spacing: {nameSpacing}</p>
 										<RangeSlider
 											value={nameSpacing}
 											min={-0.50}
@@ -1057,8 +1118,14 @@ const Editor = () => {
 							>
 								<p onClick={() => setShowSizeSlider(!showSizeSlider)}>Size</p>
 								{showSizeSlider ?
-									<div className='absolute top-10 w-[160px] border-[1px] py-2 px-4 shadow-2xl rounded-xl flex flex-col items-start'>
-										<p>Size: {sloganSize}</p>
+									<div className='absolute top-10 w-[160px] border-[1px] py-2 px-4 shadow-2xl rounded-xl flex flex-col items-start bg-white'>
+										<div
+											className='absolute top-1 right-2'
+											onClick={() => setSloganSize(1)}
+										>
+											<TiArrowRepeat />
+										</div>
+										<p className='text-xs'>Size: {sloganSize}</p>
 										<RangeSlider
 											value={sloganSize}
 											min={0.05}
@@ -1077,7 +1144,13 @@ const Editor = () => {
 								<CgFontSpacing size={20} onClick={() => setShowSpacingSlider(!showSpacingSlider)} />
 								{showSpacingSlider ?
 									<div className='absolute top-10 w-[160px] border-[1px] py-2 px-4 shadow-2xl rounded-xl flex flex-col items-start'>
-										<p>Size: {sloganSpacing}</p>
+										<div
+											className='absolute top-1 right-2'
+											onClick={() => setSloganSpacing(0.1)}
+										>
+											<TiArrowRepeat />
+										</div>
+										<p className='text-xs'>Spacing: {sloganSpacing}</p>
 										<RangeSlider
 											value={sloganSpacing}
 											min={-0.50}
@@ -1105,73 +1178,139 @@ const Editor = () => {
 							<div
 								onClick={() => setVisiblePicker(!visiblePicker)}
 								className='w-[30px] h-[30px] cursor-pointer rounded-xl '
-								style={{ background: `${'green'}` }}
+								style={{ background: `${selectParameters.symbol_color}` }}
 							>
 
 							</div>
 							<button
+								ref={fontSizeSliderRef}
 								className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl'
 							>
-								<p>Size</p>
+								<p onClick={() => setShowSizeSlider(!showSizeSlider)}>Size</p>
+								{showSizeSlider ?
+									<div className='absolute top-10 w-[160px] border-[1px] py-2 px-4 shadow-2xl rounded-xl flex flex-col items-start'>
+										<div
+											className='absolute top-1 right-2'
+											onClick={() => setSymbolSize(1)}
+										>
+											<TiArrowRepeat />
+										</div>
+										<p className='text-xs'>Size: {symbolSize}</p>
+										<RangeSlider
+											value={symbolSize}
+											min={0.05}
+											max={2.25}
+											step={0.05}
+											onChange={handleSymbolSize}
+										/>
+									</div>
+									: null
+								}
 							</button>
 							<button
+								ref={positionSliderRef}
 								className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl'
 							>
-								<p>Position</p>
+								<p onClick={() => setShowPositionSlider(!showPositionSlider)} >Position</p>
+								{showPositionSlider ?
+									<div className='absolute top-10 w-[160px] border-[1px] py-2 px-4 shadow-2xl rounded-xl flex flex-col items-start bg-white'>
+										<div
+											className='absolute top-1 right-2'
+											onClick={() => setSymbolHorizontalPositionSlider(0)}
+										>
+											<TiArrowRepeat />
+										</div>
+										<p className='text-xs'>Horizontal Pos: {symbolHorizontalPositionSlider}</p>
+										<RangeSlider
+											value={symbolHorizontalPositionSlider}
+											min={-60.0}
+											max={60.0}
+											step={1.0}
+											onChange={handleSymbolHorizontalPosition}
+										/>
+										<div
+											className='absolute top-[45px] right-2'
+											onClick={() => setSymbolVerticalPositionSlider(0)}
+										>
+											<TiArrowRepeat />
+										</div>
+										<p className='text-xs'>Vertical Pos: {symbolVerticalPositionSlider}</p>
+										<RangeSlider
+											value={symbolVerticalPositionSlider}
+											min={-60.0}
+											max={60.0}
+											step={1.0}
+											onChange={handleSymbolVerticalPosition}
+										/>
+									</div>
+									: null
+								}
 							</button>
 							<EditorInternalPositionButton
 								iconNames={[
-									<LuUnfoldHorizontal color={selectedHorizontal ? 'blue' : 'black'} size={16} />,
-									<LuUnfoldVertical size={16} color={selectedVertical ? 'blue' : 'black'} />]}
+									<LuUnfoldVertical color={selectedHorizontal ? 'blue' : 'black'} size={16} />,
+									<LuUnfoldHorizontal size={16} color={selectedVertical ? 'blue' : 'black'} />]}
 								onSelect={selectPositionIndex}
 								selected={selectPositionIndex}
 								selectedHorizontal={selectedHorizontal}
 								selectedVertical={selectedVertical}
 							/>
-							<EditorExternalPositionButton
-								iconNames={[
-									{ icon: <PiAlignBottomSimpleBold size={16} color={symbolSelectedExternalPosition === 'bottom' ? 'blue' : 'black'} />, value: "bottom" },
-									{ icon: <PiAlignLeftSimpleBold size={16} color={symbolSelectedExternalPosition === 'left' ? 'blue' : 'black'} />, value: "left" },
-									{ icon: <PiAlignRightSimpleBold size={16} color={symbolSelectedExternalPosition === 'right' ? 'blue' : 'black'} />, value: "right" },
-									{ icon: <PiAlignTopSimpleBold size={16} color={symbolSelectedExternalPosition === 'top' ? 'blue' : 'black'} />, value: "top" },
-								]}
-								onSelect={setSymbolSelectedExternalPosition}
-								selected={symbolSelectedExternalPosition}
-							/>
+							<div>
+								<EditorExternalPositionButton
+									iconNames={[
+										{ icon: <PiAlignBottomSimpleBold size={16} color={selectParameters.direction === 'column-reverse' ? 'blue' : 'black'} />, value: "bottom" },
+										{ icon: <PiAlignLeftSimpleBold size={16} color={selectParameters.direction === 'row' ? 'blue' : 'black'} />, value: "left" },
+										{ icon: <PiAlignRightSimpleBold size={16} color={selectParameters.direction === 'row-reverse' ? 'blue' : 'black'} />, value: "right" },
+										{ icon: <PiAlignTopSimpleBold size={16} color={selectParameters.direction === 'column' ? 'blue' : 'black'} />, value: "top" },
+									]}
+									onSelect={editDirection}
+									selected={symbolSelectedExternalPosition}
+								/>
+							</div>
 							<div className='h-[30px] px-3 hover:bg-gray-200 flex justify-center items-center rounded-xl cursor-pointer' ><RiDeleteBinLine size={20} color='gray' /></div>
 						</div>
 					}
 					<div
-						className='border-2 min-w-[400px] w-8/12 h-[400px] rounded-xl flex justify-center items-center gap-2'
+						className='border-2 max-w-[800px] min-w-[400px] w-8/12 h-[400px] rounded-xl flex justify-center items-center gap-4'
 						style={{
 							background: `${selectParameters.background}`,
 							flexDirection: `${selectParameters.direction}`,
 						}}
 					>
-						<div
-							className='text-center'
-							style={{
-								color: `${selectParameters.name_text_color}`,
-								fontSize: `${32 * nameSize}px`,
-								letterSpacing: `${20 * nameSpacing}px`,
-								textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-								fontFamily: `${selectParameters.name_font_types}`
-							}}
-						>
-							{companyName.length === 0 ? 'Your Company Name' : companyName}
+						<div>
+							<p
+								className='text-center'
+								style={{
+									color: `${selectParameters.name_text_color}`,
+									fontSize: `${32 * nameSize}px`,
+									letterSpacing: `${20 * nameSpacing}px`,
+									textTransform: `${nameLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+									fontFamily: `${selectParameters.name_font_types}`
+								}}
+							>
+								{companyName.length === 0 ? 'Your Company Name' : companyName}
+							</p>
+							<p
+								style={{
+									color: `${selectParameters.slogan_text_color}`,
+									fontSize: `${32 * sloganSize}px`,
+									letterSpacing: `${20 * sloganSpacing}px`,
+									textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
+									fontFamily: `${selectParameters.slogan_font_types}`
+								}}
+							>
+								{sloganName.length === 0 ? 'Your Slogan' : sloganName}
+							</p>
 						</div>
-						{IconComponent && <IconComponent color={selectParameters.symbol_color} size={90} />}
-						<div
-							style={{
-								color: `${selectParameters.slogan_text_color}`,
-								fontSize: `${32 * sloganSize}px`,
-								letterSpacing: `${20 * sloganSpacing}px`,
-								textTransform: `${sloganLowercaseButton === 'ABC' ? 'uppercase' : 'lowercase'}`,
-								fontFamily: `${selectParameters.slogan_font_types}`
-							}}
-						>
-							{sloganName.length === 0 ? 'Your Slogan' : sloganName}
-						</div>
+						{IconComponent &&
+							<IconComponent
+								color={selectParameters.symbol_color}
+								size={90 * symbolSize}
+								style={{
+									transform: `translateX(${symbolHorizontalPositionSlider}px) translateY(${symbolVerticalPositionSlider}px) rotateY(${selectedVertical ? 180 : 0}deg) rotateX(${selectedHorizontal ? 180 : 0}deg)`,
+								}}
+							/>
+						}
 					</div>
 				</div>
 			</div >
