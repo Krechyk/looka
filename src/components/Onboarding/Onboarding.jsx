@@ -95,6 +95,7 @@ const Onboarding = () => {
 
 	return (
 		<>
+
 			<Progress className='mt-2' progress={progressindicator} />
 			{vissibleStep === 1 && //pick industry
 				<div>
